@@ -1,0 +1,42 @@
+{
+    "en": {
+        "Already_a_member": "Already a member?",
+        "Log_In": "Log In",
+        "Step_Basic_Details": "Basic details",
+        "Step_Verification": "Verification",
+        "Step_Storefront": "Storefront",
+        "Onboarding_Title": "Let's set up your business profile",
+        "Onboarding_Time_Prefix": "It takes about",
+        "Onboarding_Time_Value": "2 minutes.",
+        "Onboarding_Description": "Showcase your services and get direct inquiries from thousands of families and couples planning their weddings.",
+        "Get_Started": "Get Started",
+        "Tell_us_about_your_business": "Tell us about your business",
+        "Main_wedding_service": "What is your main wedding service?",
+        "Select_a_category": "Select a category...",
+        "Please_specify": "Please specify",
+        "Type_here": "Type here",
+        "Business_Name": "Business Name",
+        "Business_Name_Placeholder": "e.g., Ahken Bridal Studio",
+        "Next": "Next"
+    },
+    "ta": {
+        "Already_a_member": "ஏற்கனவே உறுப்பினரா?",
+        "Log_In": "உள்நுழை",
+        "Step_Basic_Details": "அடிப்படை விவரங்கள்",
+        "Step_Verification": "சரிபார்ப்பு",
+        "Step_Storefront": "கடை முகப்பு",
+        "Onboarding_Title": "உங்கள் வணிக சுயவிவரத்தை அமைப்போம்",
+        "Onboarding_Time_Prefix": "இதற்கு",
+        "Onboarding_Time_Value": "2 நிமிடங்கள் ஆகும்.",
+        "Onboarding_Description": "உங்கள் சேவைகளை காட்சிப்படுத்தி, திருமணத்தை திட்டமிடும் ஆயிரக்கணக்கான குடும்பங்கள் மற்றும் ஜோடிகளிடமிருந்து நேரடி விசாரணைகளைப் பெறுங்கள்.",
+        "Get_Started": "தொடங்குங்கள்",
+        "Tell_us_about_your_business": "உங்கள் வணிகத்தைப் பற்றி எங்களிடம் கூறுங்கள்",
+        "Main_wedding_service": "உங்கள் முக்கிய திருமண சேவை என்ன?",
+        "Select_a_category": "ஒரு வகையைத் தேர்ந்தெடுக்கவும்...",
+        "Please_specify": "தயவுசெய்து குறிப்பிடவும்",
+        "Type_here": "இங்கே தட்டச்சு செய்யவும்",
+        "Business_Name": "வணிகத்தின் பெயர்",
+        "Business_Name_Placeholder": "எ.கா., Ahken Bridal Studio",
+        "Next": "அடுத்து"
+    }
+}

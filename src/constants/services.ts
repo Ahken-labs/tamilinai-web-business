@@ -1,0 +1,16 @@
+export const SERVICE_CATEGORIES = [
+  "Photography & Video",
+  "Wedding Halls & Venues",
+  "Bridal Makeup & Hair",
+  "Catering & Sweets",
+  "Bridal & Groom Wear",
+  "Wedding Decor",
+  "Wedding Cars",
+  "Jewellery",
+  "Cakes",
+  "Invitation cards",
+  "Event planners",
+  "Florists & Garlands",
+  "Honeymoon & Travel",
+  "Other",
+];
