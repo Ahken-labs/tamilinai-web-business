@@ -38,7 +38,7 @@ export default function BusinessInfoPage() {
         {t("Tell_us_about_your_business")}
       </h1>
       <Image
-        src="/basic_business.webp"
+        src="/images/basic_business.webp"
         alt=""
         width={360}
         height={164}

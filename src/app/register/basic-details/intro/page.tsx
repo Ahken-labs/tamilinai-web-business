@@ -16,7 +16,7 @@ export default function BasicDetailsIntroPage() {
       </h1>
 
       <Image
-        src="/setup_image.webp"
+        src="/images/setup_image.webp"
         alt=""
         width={400}
         height={288}
