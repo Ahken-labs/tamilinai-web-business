@@ -18,6 +18,8 @@ export default function MainPhotoPage() {
 
   const [category, setCategory] = useState("");
   const [businessName, setBusinessName] = useState("");
+  // photoFile isn't read yet — it's what gets sent once the upload API is wired up
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -27,6 +29,7 @@ export default function MainPhotoPage() {
       const raw = sessionStorage.getItem(BASIC_DETAILS_STORAGE_KEY);
       if (raw) {
         const saved = JSON.parse(raw) as { category?: string; businessName?: string };
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCategory(saved.category ?? "");
         setBusinessName(saved.businessName ?? "");
       }

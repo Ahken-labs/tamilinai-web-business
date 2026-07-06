@@ -23,6 +23,7 @@ export default function ServiceAreasPage() {
       const raw = sessionStorage.getItem(LOCATION_STORAGE_KEY);
       if (raw) {
         const saved = JSON.parse(raw) as { district?: string };
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (saved.district) setSelected([saved.district]);
       }
     } catch {

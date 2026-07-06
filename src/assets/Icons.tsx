@@ -34,9 +34,9 @@ export function BackChevronIcon({className = "w-6 h-6 shrink-0", strokeWidth = "
 export function ImagePlaceholderIcon({className = "w-9 h-9 shrink-0", stroke = "#222222", ...props }: IconProps) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none" className={className} {...props} >
-      <path d="M12.851 34.86H23.009C31.474 34.86 34.86 31.474 34.86 23.009V12.851C34.86 4.386 31.474 1 23.009 1H12.851C4.386 1 1 4.386 1 12.851V23.009C1 31.474 4.386 34.86 12.851 34.86Z" fill="white" stroke="#222222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M12.8547 14.544C14.7248 14.544 16.2407 13.028 16.2407 11.158C16.2407 9.28794 14.7248 7.77197 12.8547 7.77197C10.9847 7.77197 9.46875 9.28794 9.46875 11.158C9.46875 13.028 10.9847 14.544 12.8547 14.544Z" stroke="#222222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M2.14062 29.6973L10.4871 24.0935C11.8246 23.1962 13.7546 23.2978 14.9566 24.3305L15.5153 24.8215C16.8359 25.9558 18.969 25.9558 20.2896 24.8215L27.3325 18.7775C28.653 17.6432 30.7862 17.6432 32.1067 18.7775L34.8663 21.1477" stroke="#222222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12.851 34.86H23.009C31.474 34.86 34.86 31.474 34.86 23.009V12.851C34.86 4.386 31.474 1 23.009 1H12.851C4.386 1 1 4.386 1 12.851V23.009C1 31.474 4.386 34.86 12.851 34.86Z" fill="white" stroke={stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12.8547 14.544C14.7248 14.544 16.2407 13.028 16.2407 11.158C16.2407 9.28794 14.7248 7.77197 12.8547 7.77197C10.9847 7.77197 9.46875 9.28794 9.46875 11.158C9.46875 13.028 10.9847 14.544 12.8547 14.544Z" stroke={stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2.14062 29.6973L10.4871 24.0935C11.8246 23.1962 13.7546 23.2978 14.9566 24.3305L15.5153 24.8215C16.8359 25.9558 18.969 25.9558 20.2896 24.8215L27.3325 18.7775C28.653 17.6432 30.7862 17.6432 32.1067 18.7775L34.8663 21.1477" stroke={stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
