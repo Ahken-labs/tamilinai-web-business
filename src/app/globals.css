@@ -5,11 +5,6 @@
   --font-tamil: "Noto Sans Tamil", sans-serif;
 }
 
-@theme inline {
-  --font-poppins: var(--font-poppins);
-  --font-tamil: var(--font-tamil);
-}
-
 * {
   box-sizing: border-box;
 }
@@ -31,4 +26,121 @@ body {
 
 .animate-fade-in {
   animation: fade-in 1s ease-out forwards;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.upload-spinner {
+  border-radius: 9999px;
+  border: 4px solid rgba(217, 217, 217, 0.2);
+  border-top-color: #D9D9D9;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes shimmer-sweep {
+  from {
+    left: -75%;
+  }
+  to {
+    left: 125%;
+  }
+}
+
+.uploading-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.uploading-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: shimmer-sweep 1.4s linear infinite;
+}
+
+
+/* text-Colors */
+.text-primary {
+  color: #B31B38;
+}
+.text-black {
+  color: #000;
+}
+.text-white {
+  color: #ffffff;
+}
+
+
+/* background-Colors */
+.primary {
+  background-color: #B31B38;
+}
+.bg-white {
+  background-color: #ffffff;
+}
+
+
+/* Border-Colors */
+.border-gray {
+  border-color: #E6E6E6;
+}
+.border-gray1 {
+  border-color: #F2F2F2;
+}
+
+
+
+/* font sizes */
+.font-48 {
+  font-size: 24px;
+}
+.font-20 {
+  font-size: 16px;
+}
+.font-16 {
+  font-size: 14px;
+}
+
+@media (min-width: 640px) {
+  .font-48 {
+    font-size: 32px;
+  }
+  .font-20 {
+  font-size: 18px;
+  }
+  .font-16 {
+  font-size: 15px;
+  }
+}
+
+@media (min-width: 768px) {
+  .font-48 {
+    font-size: 40px;
+  }
+  .font-20 {
+  font-size: 19px;
+  }
+  .font-16 {
+  font-size: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .font-48 {
+    font-size: 48px;
+  }
+  .font-20 {
+  font-size: 20px;
+  }
+  .font-16 {
+  font-size: 16px;
+  }
 }

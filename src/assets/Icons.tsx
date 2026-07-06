@@ -2,8 +2,7 @@ import type { SVGProps } from "react";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
-export function Logo({ className = "w-6 h-6 shrink-0", ...props
-}: IconProps) {
+export function Logo({ className = "w-6 h-6 shrink-0", ...props}: IconProps) {
   return (
     <div className="flex w-10 h-10 items-center justify-center rounded-[20px] bg-[#BA0453] shrink-0 pt-[7px] pb-[9px] pr-[9px] pl-[7px]" >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className={className} {...props} >
@@ -13,9 +12,7 @@ export function Logo({ className = "w-6 h-6 shrink-0", ...props
   );
 }
 
-export function TamilLanguageIcon({
-  className = "w-6 h-6 shrink-0", color = "#525252", ...props
-}: IconProps & { color?: string }) {
+export function TamilLanguageIcon({className = "w-6 h-6 shrink-0", color = "#525252", ...props}: IconProps & { color?: string }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className={className} {...props} >
       <path d="M22.2437 22L17.232 12L12.2202 22M13.5362 19.3742H20.9277" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -26,10 +23,7 @@ export function TamilLanguageIcon({
   );
 }
 
-export function BackChevronIcon({
-  className = "w-6 h-6 shrink-0",
-  strokeWidth = "1.5", stroke = "#525252", ...props
-}: IconProps) {
+export function BackChevronIcon({className = "w-6 h-6 shrink-0", strokeWidth = "1.5", stroke = "#525252", ...props}: IconProps) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className={className} {...props} >
       <path d="M14.4609 4.08105L7.24805 11.2939C6.85753 11.6845 6.85753 12.3176 7.24805 12.7082L14.4609 19.921" stroke={stroke} strokeWidth={strokeWidth} strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
@@ -37,13 +31,29 @@ export function BackChevronIcon({
   );
 }
 
-export function ChevronIcon({ open,
-  className = "w-4 h-3.5 md:h-4 shrink-0 transition-transform duration-200",
-  strokeWidth = "2", stroke = "#222", ...props
-}: { open: boolean } & IconProps) {
+export function ImagePlaceholderIcon({className = "w-9 h-9 shrink-0", stroke = "#222222", ...props }: IconProps) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none" className={className} {...props} >
+      <path d="M12.851 34.86H23.009C31.474 34.86 34.86 31.474 34.86 23.009V12.851C34.86 4.386 31.474 1 23.009 1H12.851C4.386 1 1 4.386 1 12.851V23.009C1 31.474 4.386 34.86 12.851 34.86Z" fill="white" stroke="#222222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12.8547 14.544C14.7248 14.544 16.2407 13.028 16.2407 11.158C16.2407 9.28794 14.7248 7.77197 12.8547 7.77197C10.9847 7.77197 9.46875 9.28794 9.46875 11.158C9.46875 13.028 10.9847 14.544 12.8547 14.544Z" stroke="#222222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2.14062 29.6973L10.4871 24.0935C11.8246 23.1962 13.7546 23.2978 14.9566 24.3305L15.5153 24.8215C16.8359 25.9558 18.969 25.9558 20.2896 24.8215L27.3325 18.7775C28.653 17.6432 30.7862 17.6432 32.1067 18.7775L34.8663 21.1477" stroke="#222222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function CheckIcon({ className = "w-4 h-4 shrink-0", stroke = "#B31B38", ...props }: IconProps) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" className={className} {...props} >
+      <path d="M4 8.00033L6.82843 10.8288L12.485 5.17188" stroke={stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function ChevronIcon({ open, className = "w-4 h-3.5 md:h-4 shrink-0 transition-transform duration-200", strokeWidth = "2", stroke = "#222", ...props }: { open: boolean } & IconProps) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" className={`${className} ${open ? "rotate-180" : ""}`} aria-hidden="true" {...props} >
       <path d="M13.2801 5.9668L8.93343 10.3135C8.42009 10.8268 7.58009 10.8268 7.06676 10.3135L2.72009 5.9668" stroke={stroke} strokeWidth={strokeWidth} strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
+

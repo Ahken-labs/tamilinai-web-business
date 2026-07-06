@@ -11,7 +11,7 @@ export default function BasicDetailsIntroPage() {
 
   return (
     <div className="flex flex-col px-4 py-4 sm:px-4 sm:w-[640px] mx-auto">
-      <h1 className="mx-auto max-w-[300px] md:max-w-[500px] text-center font-poppins text-[24px] sm:text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-[120%] text-[#000]">
+      <h1 className="mx-auto max-w-[300px] md:max-w-[500px] text-center font-poppins font-48 font-semibold leading-[120%] text-[#000]">
         {t("Onboarding_Title")}
       </h1>
 
@@ -24,12 +24,12 @@ export default function BasicDetailsIntroPage() {
         priority
       />
 
-      <p className="mt-10 text-center font-poppins text-[16px] sm:text-[18px] md:text-[19px] lg:text-[20px] leading-[150%] text-[#525252]">
+      <p className="mt-10 text-center font-poppins font-20 leading-[150%] text-[#525252]">
         {t("Onboarding_Time_Prefix")}{" "}
         <span className="font-semibold text-[#525252]">{t("Onboarding_Time_Value")}</span>
       </p>
       <br />
-      <p className="text-center font-poppins text-[16px] sm:text-[18px] md:text-[19px] lg:text-[20px] leading-[150%] text-[#525252]">
+      <p className="text-center font-poppins font-20 leading-[150%] text-[#525252]">
         {t("Onboarding_Description")}
       </p>
 

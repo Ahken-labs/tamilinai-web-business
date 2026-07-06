@@ -36,7 +36,7 @@ export default function Button({
         bg-[#B31B38]
         hover:bg-[#8E162D]
         active:bg-[#6F1023]
-        disabled:opacity-100 disabled:cursor-not-allowed disabled:pointer-events-none
+        disabled:opacity-100 disabled:cursor-not-allowed disabled:pointer-events-none disabled:bg-[#525252] disabled:text-white disabled:hover:bg-[#525252]
 
         ${className}
       `}

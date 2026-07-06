@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import Button from "@/components/common-layout/Button";
 import FormRow from "@/components/common-layout/FormRow";
 import InputBox from "@/components/common-layout/InputBox";
 import DropdownField from "@/components/common-layout/DropdownField";
 import { SERVICE_CATEGORIES } from "@/constants/services";
+import { BASIC_DETAILS_STORAGE_KEY } from "@/constants/storageKeys";
 import Image from "next/image";
 
 export default function BusinessInfoPage() {
   const { t } = useLang();
+  const router = useRouter();
 
   const [category, setCategory] = useState("");
   const [categoryOpen, setCategoryOpen] = useState(false);
@@ -29,12 +32,16 @@ export default function BusinessInfoPage() {
     setErrors(errs);
     if (Object.keys(errs).length) return;
 
-    // Next screen not built yet
+    sessionStorage.setItem(
+      BASIC_DETAILS_STORAGE_KEY,
+      JSON.stringify({ category, specify, businessName })
+    );
+    router.push("/register/basic-details/main-photo");
   }
 
   return (
     <div className="flex flex-col px-5 py-4 sm:px-5 sm:w-[640px] mx-auto">
-      <h1 className="mx-auto max-w-[300px] md:max-w-[500px] text-center font-poppins text-[24px] sm:text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-[120%] text-[#000]">
+      <h1 className="mx-auto max-w-[300px] md:max-w-[500px] text-center font-poppins font-48 font-semibold leading-[120%] text-[#000]">
         {t("Tell_us_about_your_business")}
       </h1>
       <Image

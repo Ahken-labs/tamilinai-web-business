@@ -14,3 +14,20 @@ export const SERVICE_CATEGORIES = [
   "Honeymoon & Travel",
   "Other",
 ];
+
+export const CATEGORY_PHOTO_GUIDANCE: Record<string, string> = {
+  "Photography & Video": "Upload the best wedding photo you have captured. Families and couples will see this first.",
+  "Wedding Halls & Venues": "Upload a clear, wide photo of your beautiful hall or venue. Families and couples will see this first.",
+  "Bridal Makeup & Hair": "Upload a beautiful, clear photo of a bride you styled. Families and couples will see this first.",
+  "Catering & Sweets": "Upload an attractive photo of your best wedding food or sweets. Families and couples will see this first.",
+  "Bridal & Groom Wear": "Upload a clear photo of your best wedding saree, suit, or outfit. Families and couples will see this first.",
+  "Wedding Decor": "Upload a beautiful photo of a Manavarai (Mandapam) or hall you decorated. Families and couples will see this first.",
+  "Wedding Cars": "Upload a clear, high-quality photo of your best wedding car. Families and couples will see this first.",
+  "Jewellery": "Upload a beautiful close-up photo of your best jewellery design. Families and couples will see this first.",
+  "Cakes": "Upload a beautiful photo of a wedding cake you designed. Families and couples will see this first.",
+  "Invitation cards": "Upload a clear, high-quality photo of your best wedding invitation card. Families and couples will see this first.",
+  "Event planners": "Upload a beautiful photo of a grand wedding event you planned. Families and couples will see this first.",
+  "Florists & Garlands": "Upload a beautiful photo of your fresh wedding garlands or floral work. Families and couples will see this first.",
+  "Honeymoon & Travel": "Upload a beautiful photo of a top honeymoon destination or hotel you offer. Families and couples will see this first.",
+  "Other": "Upload a beautiful, clear picture that shows exactly what you offer. Families and couples will see this first.",
+};

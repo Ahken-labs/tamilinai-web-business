@@ -13,6 +13,7 @@ interface InputBoxProps {
   onFocus?: () => void;
   onBlur?: () => void;
   compact?: boolean;
+  multiline?: boolean;
 }
 
 export default function InputBox({
@@ -26,11 +27,45 @@ export default function InputBox({
   onFocus,
   onBlur,
   compact = false,
+  multiline = false,
 }: InputBoxProps) {
   const id = useId();
   const [focused, setFocused] = useState(false);
 
   const isActive = focused || value.length > 0;
+
+  function autoGrow(el: HTMLTextAreaElement | null) {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }
+
+  if (compact && multiline) {
+    return (
+      <div className="flex flex-col w-full">
+        <div
+          className={`flex min-h-[40px] sm:min-h-[44px] md:min-h-[48px] items-start rounded-[12px] border bg-[#F2F2F2] py-2 pl-2 sm:pl-3 pr-4 transition-colors
+            ${focused ? "border-[#F2F2F2]" : "border-[#F2F2F2]"} ${className ?? ""}`}
+        >
+          <textarea
+            id={id}
+            value={value}
+            placeholder={label}
+            aria-label={label}
+            rows={1}
+            ref={autoGrow}
+            onInput={(e) => autoGrow(e.currentTarget)}
+            onChange={(e) => onChange(e.target.value)}
+            onFocus={() => { setFocused(true); onFocus?.(); }}
+            onBlur={() => { setFocused(false); onBlur?.(); }}
+            className="w-full resize-none overflow-hidden bg-transparent text-[16px] leading-[150%] outline-none placeholder:text-[#656565] text-[#222]"
+          />
+          {suffix && <div className="shrink-0 ml-2 flex items-center">{suffix}</div>}
+        </div>
+        {error && <p className="mt-2 text-[14px] text-[#B31B38]">{error}</p>}
+      </div>
+    );
+  }
 
   if (compact) {
     return (
