@@ -33,8 +33,8 @@ export default function BusinessInfoPage() {
   }
 
   return (
-    <div className="flex flex-col px-4 py-4 sm:px-5 sm:w-[640px] mx-auto">
-      <h1 className="text-center font-poppins text-[24px] sm:text-[32] md:text-[40px] lg:text-[48px] font-bold leading-[120%] text-[#000]">
+    <div className="flex flex-col px-5 py-4 sm:px-5 sm:w-[640px] mx-auto">
+      <h1 className="mx-auto max-w-[300px] md:max-w-[500px] text-center font-poppins text-[24px] sm:text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-[120%] text-[#000]">
         {t("Tell_us_about_your_business")}
       </h1>
       <Image

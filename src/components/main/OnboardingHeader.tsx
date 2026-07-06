@@ -35,16 +35,16 @@ export default function OnboardingHeader({
             <BackChevronIcon /> </div>
         </button>
 
-        <div className="flex-1 max-w-[584px] mx-auto max-[500px]:px-4 px-6">
+        <div className="flex-1 max-[340px]:max-w-[192px] max-w-[584px] mx-auto max-[340px]:px-0 max-[500px]:px-4 px-6">
           <StepProgress currentStep={currentStep} totalSteps={totalSteps} text={text} />
         </div>
 
         <button
           type="button"
           aria-label="Change language"
-          className="h-10 w-10 flex shrink-0 cursor-pointer select-none items-center justify-center"
+          className="h-10 w-10 flex shrink-0 max-[500px]:p-0.5 p-0 cursor-pointer select-none items-center justify-center"
         >
-          <div className="rounded-full p-1.5 bg-[#F0F0F0]">
+          <div className="rounded-full max-[500px]:p-1.5 p-2 bg-[#F0F0F0]">
             <TamilLanguageIcon />
           </div>
         </button>
