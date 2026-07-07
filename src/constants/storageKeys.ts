@@ -3,3 +3,7 @@ export const LOCATION_STORAGE_KEY = "inai_biz_location";
 export const SERVICE_AREAS_STORAGE_KEY = "inai_biz_service_areas";
 export const EXPERIENCE_STORAGE_KEY = "inai_biz_experience";
 export const WHATSAPP_STORAGE_KEY = "inai_biz_whatsapp";
+export const OTP_SENT_AT_KEY = "inai_biz_otp_sent_at";
+export const OTP_COOLDOWN_KEY = "inai_biz_otp_cd";
+export const OTP_RESEND_COUNT_KEY = "inai_biz_otp_resend_count";
+export const SERVICES_STORAGE_KEY = "inai_biz_services";

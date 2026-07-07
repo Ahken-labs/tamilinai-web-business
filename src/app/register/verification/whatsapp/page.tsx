@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useLang } from "@/context/LangContext";
 import Button from "@/components/common-layout/Button";
@@ -9,9 +10,12 @@ import InputBox from "@/components/common-layout/InputBox";
 import CountryCodeSelect from "@/components/ui/CountryCodeSelect";
 import { COUNTRIES } from "@/constants/countries";
 import { sanitizePhoneInput, validatePhone } from "@/utils/validation";
+import { WHATSAPP_STORAGE_KEY, OTP_SENT_AT_KEY, OTP_COOLDOWN_KEY, OTP_RESEND_COUNT_KEY } from "@/constants/storageKeys";
+import { RESEND_COOLDOWNS } from "@/constants/otp";
 
 export default function WhatsAppPage() {
   const { t } = useLang();
+  const router = useRouter();
 
   const [countryCode, setCountryCode] = useState(COUNTRIES[0]);
   const [countryOpen, setCountryOpen] = useState(false);
@@ -26,12 +30,16 @@ export default function WhatsAppPage() {
     setErrors(errs);
     if (Object.keys(errs).length) return;
 
-    // OTP verification not built yet
+    sessionStorage.setItem(WHATSAPP_STORAGE_KEY, JSON.stringify({ countryCode, phone }));
+    sessionStorage.setItem(OTP_SENT_AT_KEY, String(Date.now()));
+    sessionStorage.setItem(OTP_COOLDOWN_KEY, String(RESEND_COOLDOWNS[0]));
+    sessionStorage.setItem(OTP_RESEND_COUNT_KEY, "0");
+    router.push("/register/verification/otp");
   }
 
   return (
     <div className="font-poppins flex flex-col px-5 py-4 sm:w-[640px] mx-auto">
-      <h1 className="mx-auto max-w-[350px] sm:max-w-[420px] md:max-w-[520px] text-center font-48 font-semibold leading-[120%] text-[#000]">
+      <h1 className="mx-auto max-w-[350px] sm:max-w-[420px] md:max-w-[600px] text-center font-48 font-semibold leading-[120%] text-[#000]">
         {t("How_should_reach_you")}
       </h1>
 
