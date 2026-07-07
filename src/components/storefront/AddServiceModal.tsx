@@ -256,7 +256,7 @@ export default function AddServiceModal({ onClose, onSave }: AddServiceModalProp
 
         <FormRow label={t("Description")} error={errors.description}>
           <InputBox
-            className="h-20"
+            className="!min-h-[80px]"
             compact
             multiline
             value={description}
