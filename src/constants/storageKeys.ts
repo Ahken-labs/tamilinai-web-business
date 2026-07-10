@@ -8,3 +8,5 @@ export const OTP_SENT_AT_KEY = "inai_biz_otp_sent_at";
 export const OTP_COOLDOWN_KEY = "inai_biz_otp_cd";
 export const OTP_RESEND_COUNT_KEY = "inai_biz_otp_resend_count";
 export const SERVICES_STORAGE_KEY = "inai_biz_services";
+export const BIO_STORAGE_KEY = "inai_biz_bio";
+export const MAIN_PHOTO_STORAGE_KEY = "inai_biz_main_photo";

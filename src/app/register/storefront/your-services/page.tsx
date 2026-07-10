@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import Button from "@/components/common-layout/Button";
 import { PlusIcon } from "@/assets/Icons";
@@ -11,6 +12,7 @@ type Service = NewService & { id: string };
 
 export default function YourServicesPage() {
   const { t } = useLang();
+  const router = useRouter();
 
   const [services, setServices] = useState<Service[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -21,7 +23,7 @@ export default function YourServicesPage() {
   }
 
   function handleFinish() {
-    // Next screen not built yet
+    router.push("/dashboard");
   }
 
   return (

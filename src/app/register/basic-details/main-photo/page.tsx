@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import { ImagePlaceholderIcon } from "@/assets/Icons";
 import { CATEGORY_PHOTO_GUIDANCE } from "@/constants/services";
-import { BASIC_DETAILS_STORAGE_KEY } from "@/constants/storageKeys";
+import { BASIC_DETAILS_STORAGE_KEY, MAIN_PHOTO_STORAGE_KEY } from "@/constants/storageKeys";
 import Button from "@/components/common-layout/Button";
-import { compressImage } from "@/utils/imageCompression";
+import { compressImage, fileToDataUrl } from "@/utils/imageCompression";
 
 const UPLOAD_DURATION_MS = 1800;
 
@@ -18,8 +18,6 @@ export default function MainPhotoPage() {
 
   const [category, setCategory] = useState("");
   const [businessName, setBusinessName] = useState("");
-  // photoFile isn't read yet — it's what gets sent once the upload API is wired up
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -73,6 +71,14 @@ export default function MainPhotoPage() {
 
   function handleChange() {
     fileInputRef.current?.click();
+  }
+
+  async function handleAdd() {
+    if (photoFile) {
+      const dataUrl = await fileToDataUrl(photoFile);
+      sessionStorage.setItem(MAIN_PHOTO_STORAGE_KEY, dataUrl);
+    }
+    router.push("/register/basic-details/location");
   }
 
   return (
@@ -169,7 +175,7 @@ export default function MainPhotoPage() {
             <button
               type="button"
               disabled={uploading}
-              onClick={() => router.push("/register/basic-details/location")}
+              onClick={handleAdd}
               className={`rounded-full px-10 py-3 font-16 font-semibold text-white transition-all duration-150 ${
                 uploading
                   ? "cursor-not-allowed bg-[#525252] uploading-shimmer"
