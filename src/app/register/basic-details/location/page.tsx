@@ -22,8 +22,8 @@ export default function LocationPage() {
 
   function handleNext() {
     const errs: Record<string, string> = {};
-    if (!village) errs.village = "*Village/City/town is required";
-    if (!district) errs.district = "*Please select a district";
+    if (!village) errs.village = t("Village_required");
+    if (!district) errs.district = t("Please_select_a_district");
 
     setErrors(errs);
     if (Object.keys(errs).length) return;

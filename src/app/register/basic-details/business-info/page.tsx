@@ -25,9 +25,9 @@ export default function BusinessInfoPage() {
 
   function handleNext() {
     const errs: Record<string, string> = {};
-    if (!category) errs.category = "*Please select a category";
-    if (isOther && !specify) errs.specify = "*Please specify your service";
-    if (!businessName) errs.businessName = "*Business name is required";
+    if (!category) errs.category = t("Please_select_a_category");
+    if (isOther && !specify) errs.specify = t("Please_specify_your_service");
+    if (!businessName) errs.businessName = t("Business_name_required");
 
     setErrors(errs);
     if (Object.keys(errs).length) return;
@@ -36,7 +36,7 @@ export default function BusinessInfoPage() {
       BASIC_DETAILS_STORAGE_KEY,
       JSON.stringify({ category, specify, businessName })
     );
-    router.push("/register/basic-details/main-photo");
+    router.push("/register/basic-details/claim-url");
   }
 
   return (

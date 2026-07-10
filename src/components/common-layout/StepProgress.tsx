@@ -43,7 +43,7 @@ export default function StepProgress({
               }`}
             >
               <span
-                className={`select-none whitespace-nowrap font-poppins max-[500px]:text-[12px] text-[14px] font-medium leading-[150%] ${
+                className={`select-none whitespace-nowrap lang-ta:whitespace-normal font-poppins max-[500px]:text-[12px] text-[14px] lang-ta:max-[500px]:text-[10px] lang-ta:text-[12px] font-medium leading-[150%] ${
                   i < currentStep ? "text-[#B31B38]" : "text-secondary4"
                 }`}
                 style={

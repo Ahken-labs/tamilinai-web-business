@@ -1,3 +1,5 @@
+import type { TranslationKey } from "@/context/LangContext";
+
 // ─── Phone lengths (digits after stripping country code + leading zeros) ───────
 // [min, max]
 const PHONE_LENGTHS: Record<string, [number, number]> = {
@@ -90,18 +92,18 @@ export function sanitizePhoneInput(value: string, countryString: string): string
 }
 
 // Validate phone — returns error string or null
-export function validatePhone(phone: string, countryString: string): string | null {
+export function validatePhone(phone: string, countryString: string, t: (key: TranslationKey) => string): string | null {
   const code = extractCountryCode(countryString);
   const [min, max] = getPhoneLengths(code);
   const digits = phone.replace(/\D/g, '').replace(/^0+/, '');
 
-  if (!digits) return '*Phone number is required';
+  if (!digits) return t('Phone_number_required');
   if (digits.length < min) {
     return min === max
-      ? `*Must be ${min} digits`
-      : `*Must be ${min}–${max} digits`;
+      ? t('Must_be_exact_digits').replace('{min}', String(min))
+      : t('Must_be_range_digits').replace('{min}', String(min)).replace('{max}', String(max));
   }
-  if (digits.length > max) return `*Too long — max ${max} digits`;
+  if (digits.length > max) return t('Too_long_max_digits').replace('{max}', String(max));
   return null;
 }
 
@@ -126,30 +128,30 @@ const DOMAIN_TYPOS: Record<string, string> = {
 
 // Validate email — returns { error, warning }
 // error blocks submit, warning just shows a hint but allows submit
-export function validateEmail(email: string): { error: string | null; warning: string | null } {
+export function validateEmail(email: string, t: (key: TranslationKey) => string): { error: string | null; warning: string | null } {
   const val = email.trim();
-  if (!val) return { error: '*Email is required', warning: null };
+  if (!val) return { error: t('Email_required'), warning: null };
 
   const atIndex = val.indexOf('@');
-  if (atIndex <= 0) return { error: '*Please include an @ in the email address', warning: null };
+  if (atIndex <= 0) return { error: t('Include_at_symbol'), warning: null };
 
   const local = val.slice(0, atIndex);
   const domain = val.slice(atIndex + 1);
 
-  if (!local) return { error: '*Please enter the part before @', warning: null };
-  if (!domain) return { error: '*Please enter a domain after @', warning: null };
+  if (!local) return { error: t('Enter_part_before_at'), warning: null };
+  if (!domain) return { error: t('Enter_domain_after_at'), warning: null };
 
   const dotIndex = domain.lastIndexOf('.');
-  if (dotIndex <= 0) return { error: '*Please enter a valid domain (e.g. gmail.com)', warning: null };
-  if (dotIndex === domain.length - 1) return { error: '*The domain looks incomplete', warning: null };
+  if (dotIndex <= 0) return { error: t('Enter_valid_domain'), warning: null };
+  if (dotIndex === domain.length - 1) return { error: t('Domain_incomplete'), warning: null };
 
   const tld = domain.slice(dotIndex + 1);
-  if (tld.length < 2) return { error: '*Please enter a valid email address', warning: null };
+  if (tld.length < 2) return { error: t('Enter_valid_email'), warning: null };
 
   // Check for known domain typos — warn but don't block
   const suggestion = DOMAIN_TYPOS[domain.toLowerCase()];
   if (suggestion) {
-    return { error: null, warning: `Did you mean ${local}@${suggestion}?` };
+    return { error: null, warning: t('Did_you_mean').replace('{email}', `${local}@${suggestion}`) };
   }
 
   return { error: null, warning: null };

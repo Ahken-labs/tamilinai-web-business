@@ -5,7 +5,7 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 
 // Types
 type Lang = "en" | "ta";
-type TranslationKey = keyof typeof translations.en;
+export type TranslationKey = keyof typeof translations.en;
 
 interface LangContextValue {
   lang: Lang;
@@ -28,6 +28,11 @@ export function LangProvider({ children }: { children: ReactNode }) {
       setTimeout(() => setLangState(saved), 0);
     }
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.documentElement.classList.toggle("lang-ta", lang === "ta");
+  }, [lang]);
 
   const setLang = (l: Lang) => {
     setLangState(l);

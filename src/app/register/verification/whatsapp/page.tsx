@@ -24,7 +24,7 @@ export default function WhatsAppPage() {
 
   function handleVerify() {
     const errs: Record<string, string> = {};
-    const phoneErr = validatePhone(phone, countryCode);
+    const phoneErr = validatePhone(phone, countryCode, t);
     if (phoneErr) errs.phone = phoneErr;
 
     setErrors(errs);
@@ -80,7 +80,11 @@ export default function WhatsAppPage() {
         </FormRow>
       </div>
 
-      <Button text={t("Verify_number")} onPress={handleVerify} className="mt-8 sm:mt-9 md:mt-10 mx-auto" />
+      <Button
+        text={t("Verify_number")}
+        onPress={handleVerify}
+        className={`mt-8 sm:mt-9 md:mt-10 mx-auto ${!phone ? "!bg-[#525252] hover:!bg-[#525252]" : ""}`}
+      />
     </div>
   );
 }

@@ -22,7 +22,7 @@ export default function ExperiencePage() {
 
   function handleNext() {
     const errs: Record<string, string> = {};
-    if (!experience) errs.experience = "*Please select your years of experience";
+    if (!experience) errs.experience = t("Please_select_years_of_experience");
 
     setErrors(errs);
     if (Object.keys(errs).length) return;
@@ -77,7 +77,11 @@ export default function ExperiencePage() {
         </FormRow>
       </div>
 
-      <Button text={t("Next")} onPress={handleNext} className="mt-5 mx-auto w-[173px]" />
+      <Button
+        text={t("Next")}
+        onPress={handleNext}
+        className={`mt-5 mx-auto w-[173px] ${!experience ? "!bg-[#525252] hover:!bg-[#525252]" : ""}`}
+      />
     </div>
   );
 }

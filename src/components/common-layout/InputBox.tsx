@@ -58,7 +58,7 @@ export default function InputBox({
             onChange={(e) => onChange(e.target.value)}
             onFocus={() => { setFocused(true); onFocus?.(); }}
             onBlur={() => { setFocused(false); onBlur?.(); }}
-            className="w-full resize-none overflow-hidden bg-transparent text-[16px] leading-[150%] outline-none placeholder:text-[#656565] text-[#222]"
+            className="w-full resize-none overflow-hidden bg-transparent lang-ta:text-[14px] text-[16px] leading-[150%] outline-none placeholder:text-[#656565] text-[#222]"
           />
           {suffix && <div className="shrink-0 ml-2 flex items-center">{suffix}</div>}
         </div>
@@ -83,7 +83,7 @@ export default function InputBox({
             onChange={(e) => onChange(e.target.value)}
             onFocus={() => { setFocused(true); onFocus?.(); }}
             onBlur={() => { setFocused(false); onBlur?.(); }}
-            className="w-full bg-transparent text-[16px] outline-none placeholder:text-[#656565] text-[#222]"
+            className="w-full bg-transparent lang-ta:text-[14px] text-[16px] outline-none placeholder:text-[#656565] text-[#222]"
           />
           {suffix && <div className="shrink-0 ml-2 flex items-center">{suffix}</div>}
         </div>
@@ -115,7 +115,7 @@ export default function InputBox({
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => { setFocused(true); onFocus?.(); }}
           onBlur={() => { setFocused(false); onBlur?.(); }}
-          className="w-full bg-transparent text-[16px] text-[#222222] outline-none pt-4"
+          className="w-full bg-transparent lang-ta:text-[14px] text-[16px] text-[#222222] outline-none pt-4"
         />
         {suffix && <div className="shrink-0 ml-2 flex items-center">{suffix}</div>}
       </div>

@@ -38,6 +38,14 @@ export default function BasicDetailsIntroPage() {
         onPress={() => router.push("/register/basic-details/business-info")}
         className="mt-6 mx-auto w-[173px]"
       />
+
+
+      <div className="mt-5 text-[#767676] max-[500px]:text-[12px] text-[14px] text-center max-[500px]:max-w-[278px] max-w-[288px] lang-ta:max-[500px]:max-w-[340px] lang-ta:max-w-[350px] mx-auto">
+        {t("Terms_agreement_prefix")}{" "}
+        <button type="button" className="underline cursor-pointer">{t("Terms_and_Conditions")}</button>{" "}
+        {t("And")}{" "}
+        <button type="button" className="underline cursor-pointer">{t("Privacy_Policy")}</button>
+      </div>
     </div>
   );
 }

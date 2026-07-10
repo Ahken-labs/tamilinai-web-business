@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant lang-ta (.lang-ta &);
+
 :root {
   --font-poppins: "Poppins", sans-serif;
   --font-tamil: "Noto Sans Tamil", sans-serif;
@@ -211,5 +213,55 @@ body {
   }
   .font-16 {
   font-size: 16px;
+  }
+}
+
+/* Tamil (Noto Sans Tamil) renders visibly larger than Poppins at the same
+   font-size, and its longer translated strings wrap more within the same
+   max-width — scale these down ~15% so Tamil layouts match the English
+   spacing/line-count the design was built against. */
+.lang-ta .font-48 {
+  font-size: 18px;
+}
+.lang-ta .font-20 {
+  font-size: 14px;
+}
+.lang-ta .font-16 {
+  font-size: 12px;
+}
+
+@media (min-width: 640px) {
+  .lang-ta .font-48 {
+    font-size: 27px;
+  }
+  .lang-ta .font-20 {
+    font-size: 15px;
+  }
+  .lang-ta .font-16 {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 768px) {
+  .lang-ta .font-48 {
+    font-size: 34px;
+  }
+  .lang-ta .font-20 {
+    font-size: 16px;
+  }
+  .lang-ta .font-16 {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lang-ta .font-48 {
+    font-size: 41px;
+  }
+  .lang-ta .font-20 {
+    font-size: 17px;
+  }
+  .lang-ta .font-16 {
+    font-size: 14px;
   }
 }

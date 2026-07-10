@@ -67,7 +67,7 @@ export default function ServiceAreasPage() {
 
       <label className="mx-auto max-w-[360px] mt-8 sm:mt-10 md:mt-11 lg:mt-12 flex items-center gap-3 sm:gap-4 rounded-[12px] sm:rounded-[16px] bg-[#F2F2F2] px-2 sm:px-4 py-3 sm:py-4 cursor-pointer">
         <Toggle checked={islandWide} onChange={handleIslandWideChange} />
-        <span className="font-poppins text-[16px] font-normal leading-[135%] text-[#222222]">
+        <span className="font-poppins lang-ta:text-[14px] text-[16px] font-normal leading-[135%] text-[#222222]">
           {t("Island_wide_toggle")}
         </span>
       </label>
