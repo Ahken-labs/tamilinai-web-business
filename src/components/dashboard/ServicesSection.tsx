@@ -107,12 +107,16 @@ function ServiceCard({
   );
 }
 
-// Each user's services
+// Each services
 function ServiceListItem({ service, onViewDetails }: { service: MockService; onViewDetails: (s: MockService) => void }) {
   const { t } = useLang();
 
   return (
-    <div className="flex max-w-[640px] mx-auto w-full items-center max-[500px]:gap-3 gap-5 max-[500px]:rounded-[16px] rounded-[32px] max-[500px]:p-2 p-4 shadow-[0_0_8px_0_rgba(0,0,0,0.12)]">
+    <button
+      type="button"
+      onClick={() => onViewDetails(service)}
+      className="flex max-w-[640px] mx-auto w-full items-center max-[500px]:gap-3 gap-5 max-[500px]:rounded-[16px] rounded-[32px] max-[500px]:p-2 p-4 shadow-[0_0_8px_0_rgba(0,0,0,0.12)] cursor-pointer text-left"
+    >
       <div className="relative max-[500px]:h-20 h-39 max-[500px]:w-20 w-39 shrink-0 overflow-hidden max-[500px]:rounded-[12px] rounded-[20px] bg-[#D9D9D9]">
         {service.image && <Image src={service.image} alt={service.title} fill className="object-cover" />}
       </div>
@@ -120,16 +124,12 @@ function ServiceListItem({ service, onViewDetails }: { service: MockService; onV
       <div className="min-w-0 flex-1">
         <p className="leading-[150%] truncate font-poppins max-[500px]:text-[14px] text-[20px] font-semibold text-[#222222]">{service.title}</p>
         <p className="leading-[135%] max-[500px]:mt-0.5 mt-1 max-[500px]:line-clamp-2 line-clamp-3 font-poppins font-16 text-[#767676]">{service.description}</p>
-        <button
-          type="button"
-          onClick={() => onViewDetails(service)}
-          className="max-[500px]:mt-1 mt-4 inline-flex items-center py-[2px] pl-2 pr-1.5 bg-[#F2F2F2] rounded-full gap-1 cursor-pointer"
-        >
+        <div className="max-[500px]:mt-1 mt-4 inline-flex items-center py-[2px] pl-2 pr-1.5 bg-[#F2F2F2] rounded-full gap-1">
           <span className="font-poppins max-[500px]:text-[12px] text-[16px] leading-[150%] text-[#B31B38]">{t("View_details")}</span>
           <BackChevronIcon className="max-[500px]:w-3 w-4 max-[500px]:h-3 h-4 shrink-0 rotate-180" stroke="#B31B38" strokeWidth={2.5} />
-        </button>
+        </div>
       </div>
-    </div>
+    </button>
   );
 }
 
@@ -176,7 +176,7 @@ export default function ServicesSection() {
 
       <MobileScroll onExpand={setLightboxService} onViewDetails={setDetailsService} />
 
-      <div className="max-[500px]:mt-12 mt-20 flex flex-col max-[500px]:gap-4 gap-5 min-[500px]:px-2 sm:px-4">
+      <div className="max-[500px]:mt-12 mt-20 flex flex-col max-[500px]:gap-4 gap-5 px-2 sm:px-4">
         {SERVICES.map((s) => (
           <ServiceListItem key={s.id} service={s} onViewDetails={setDetailsService} />
         ))}

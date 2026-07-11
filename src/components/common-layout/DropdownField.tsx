@@ -45,7 +45,7 @@ export default function DropdownField({
 
   const isActive = focused || open || (value?.length ?? 0) > 0;
   // True when user has typed a partial query that isn't an exact match in the list.
-  const isFiltering = !!value && !items.includes(value);
+  const isFiltering = typeable && !!value && !items.includes(value);
 
   const borderClass = open
     ? (openBorderClassName ?? borderClassName ?? "border-[#F2F2F2]")

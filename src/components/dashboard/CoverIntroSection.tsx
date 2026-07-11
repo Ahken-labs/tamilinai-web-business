@@ -11,7 +11,7 @@ const DUMMY_DATA = {
   photoUrl: "/images/wedding_hall.webp",
   logoUrl: "",
   bio: "Luxury High-End Products: Tailored exclusively using premium, high-end brands to ensure the finest quality for your skin. Soft & Flawless Finish: A beautifully radiant, long-lasting bridal look crafted for your special day. huhds dhsidns dnsjdbs dsnfjsdnv usscsa sjishid xchasixhcs shciosahc ahuchas shoiash ahouag ahshougas ahiahsx aixhaix asxuax ajsbcxa scbas csa cca scas a  xa xha sxcsbdsbud babsuab bsababsa asbja da c c a cas xcscsdc sdc sdc ds d cd c ",
-  experience: "2 years experience",
+  experience: "2 years",
   qualifications: "Certified cosmetologist",
   careerHighlight: "Award-winning photographer, or 500+ weddings hosted",
   countryCode: "Sri Lanka (+94)",

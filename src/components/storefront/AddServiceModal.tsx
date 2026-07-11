@@ -12,6 +12,7 @@ import { formatThousands, capitalizeFirst } from "@/utils/format";
 
 const UPLOAD_DURATION_MS = 1200;
 const MAX_PHOTOS = 4;
+const MAX_DESCRIPTION_LENGTH = 800;
 
 export type NewService = {
   title: string;
@@ -20,22 +21,27 @@ export type NewService = {
   photos: string[];
 };
 
-type Photo = { url: string; uploading: boolean };
+type Photo = { id: string; url: string; uploading: boolean };
 
 type AddServiceModalProps = {
   onClose: () => void;
   onSave: (service: NewService) => void;
+  // When provided, the modal opens pre-filled in edit mode instead of the empty add flow.
+  initialService?: NewService;
 };
 
-export default function AddServiceModal({ onClose, onSave }: AddServiceModalProps) {
+export default function AddServiceModal({ onClose, onSave, initialService }: AddServiceModalProps) {
   const { t } = useLang();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isEditing = !!initialService;
 
   const [step, setStep] = useState<"details" | "photos">("details");
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
+  const [photos, setPhotos] = useState<Photo[]>(
+    () => initialService?.photos.map((url) => ({ id: crypto.randomUUID(), url, uploading: false })) ?? []
+  );
+  const [title, setTitle] = useState(initialService?.title ?? "");
+  const [price, setPrice] = useState(initialService?.price ?? "");
+  const [description, setDescription] = useState(initialService?.description ?? "");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const uploading = photos.some((p) => p.uploading);
@@ -49,9 +55,10 @@ export default function AddServiceModal({ onClose, onSave }: AddServiceModalProp
       if (!file.type.startsWith("image/")) continue;
       const compressed = await compressImage(file);
       const url = URL.createObjectURL(compressed);
-      setPhotos((prev) => [...prev, { url, uploading: true }]);
+      const id = crypto.randomUUID();
+      setPhotos((prev) => [...prev, { id, url, uploading: true }]);
       setTimeout(() => {
-        setPhotos((prev) => prev.map((p) => (p.url === url ? { ...p, uploading: false } : p)));
+        setPhotos((prev) => prev.map((p) => (p.id === id ? { ...p, uploading: false } : p)));
       }, UPLOAD_DURATION_MS);
     }
   }
@@ -72,9 +79,12 @@ export default function AddServiceModal({ onClose, onSave }: AddServiceModalProp
     e.preventDefault();
   }
 
-  function removePhoto(url: string) {
-    setPhotos((prev) => prev.filter((p) => p.url !== url));
-    URL.revokeObjectURL(url);
+  function removePhoto(id: string) {
+    setPhotos((prev) => {
+      const removed = prev.find((p) => p.id === id);
+      if (removed) URL.revokeObjectURL(removed.url);
+      return prev.filter((p) => p.id !== id);
+    });
   }
 
   function handleSave() {
@@ -134,7 +144,7 @@ export default function AddServiceModal({ onClose, onSave }: AddServiceModalProp
       >
         <div onDrop={handleDrop} onDragOver={handleDragOver} className="max-w-[432px] mx-auto grid grid-cols-2 gap-3">
           {photos.map((photo) => (
-            <div key={photo.url} className="relative aspect-square overflow-hidden rounded-[12px] bg-[#F2F2F2]">
+            <div key={photo.id} className="relative aspect-square overflow-hidden rounded-[12px] bg-[#F2F2F2]">
               {/* eslint-disable-next-line @next/next/no-img-element -- blob: preview URL */}
               <img src={photo.url} alt="" className={`h-full w-full object-cover transition-[filter] ${photo.uploading ? "brightness-50" : ""}`} />
               {photo.uploading ? (
@@ -150,7 +160,7 @@ export default function AddServiceModal({ onClose, onSave }: AddServiceModalProp
               ) : (
                 <button
                   type="button"
-                  onClick={() => removePhoto(photo.url)}
+                  onClick={() => removePhoto(photo.id)}
                   className="absolute right-2 top-2 flex p-1.5 items-center justify-center rounded-full cursor-pointer border border-white/50 bg-white/80 backdrop-blur-[16px] shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_0_rgba(0,0,0,0.04),0_4px_8px_0_rgba(0,0,0,0.10)]"
                   aria-label="Remove photo"
                 >
@@ -179,7 +189,7 @@ export default function AddServiceModal({ onClose, onSave }: AddServiceModalProp
 
   return (
     <Modal
-      title={t("Add_service_details")}
+      title={isEditing ? "" : t("Add_service_details")}
       onClose={onClose}
       onAddPhoto={photos.length > 0 ? () => setStep("photos") : undefined}
       footer={
@@ -221,12 +231,12 @@ export default function AddServiceModal({ onClose, onSave }: AddServiceModalProp
       ) : (
         <div onDrop={handleDrop} onDragOver={handleDragOver} className="no-scrollbar flex gap-3 overflow-x-auto">
           {photos.map((photo) => (
-            <div key={photo.url} className="relative h-[124px] w-[124px] shrink-0 overflow-hidden rounded-[12px] bg-[#F2F2F2]">
+            <div key={photo.id} className="relative h-[124px] w-[124px] shrink-0 overflow-hidden rounded-[12px] bg-[#F2F2F2]">
               {/* eslint-disable-next-line @next/next/no-img-element -- blob: preview URL */}
               <img src={photo.url} alt="" className="h-full w-full object-cover" />
               <button
                 type="button"
-                onClick={() => removePhoto(photo.url)}
+                onClick={() => removePhoto(photo.id)}
                 className="absolute right-2 top-2 flex h-[28px] w-[28px] items-center justify-center rounded-full cursor-pointer border border-white/50 bg-white/80 backdrop-blur-[16px] shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_0_rgba(0,0,0,0.04),0_4px_8px_0_rgba(0,0,0,0.10)]"
                 aria-label="Remove photo"
               >
@@ -260,9 +270,12 @@ export default function AddServiceModal({ onClose, onSave }: AddServiceModalProp
             compact
             multiline
             value={description}
-            onChange={(v) => { setDescription(capitalizeFirst(v)); setErrors((e) => ({ ...e, description: "" })); }}
+            onChange={(v) => { setDescription(capitalizeFirst(v).slice(0, MAX_DESCRIPTION_LENGTH)); setErrors((e) => ({ ...e, description: "" })); }}
             label={t("Description_Placeholder")}
           />
+          <p className="mt-1 text-right font-poppins text-[14px] text-[#767676]">
+            ({description.length} / {MAX_DESCRIPTION_LENGTH})
+          </p>
         </FormRow>
       </div>
     </Modal>
