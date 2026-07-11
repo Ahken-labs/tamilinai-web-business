@@ -15,7 +15,7 @@ export default function PerformanceSection() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="px-4 mt-6">
+    <div className="max-w-[640px] mx-auto px-4 mt-6">
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { BackChevronIcon, EditIcon, Logo, ShareIcon } from "@/assets/Icons";
+import { EditIcon, Logo, ShareIcon } from "@/assets/Icons";
 import LangDropdownButton from "./LangDropdownButton";
 
 type DashboardHeaderProps = {
@@ -28,9 +28,9 @@ export default function DashboardHeader({ onBack, onEdit, onShare, variant = "ow
             aria-label="Go back"
             className="h-10 w-10 flex shrink-0 max-[500px]:p-0.5 p-0 cursor-pointer select-none items-center justify-center"
           >
-            <div className="rounded-full max-[500px]:p-1.5 p-2 bg-[#F0F0F0]">
+            {/* <div className="rounded-full max-[500px]:p-1.5 p-2 bg-[#F0F0F0]">
               <BackChevronIcon />
-            </div>
+            </div> */}
           </button>
         </div>
 

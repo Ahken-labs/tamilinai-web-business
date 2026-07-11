@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import DashboardHeader from "@/components/main/DashboardHeader";
-import { CoverPhoto, IntroDetails } from "@/components/dashboard/CoverIntroSection";
+import CoverIntroSection from "@/components/dashboard/CoverIntroSection";
 import PerformanceSection from "@/components/dashboard/PerformanceSection";
 import ServicesSection from "@/components/dashboard/ServicesSection";
 import LocationSection from "@/components/dashboard/LocationSection";
@@ -15,8 +15,7 @@ export default function DashboardPage() {
     <>
       <DashboardHeader variant="owner" onEdit={() => router.push("/dashboard/edit")} />
       <div className="font-poppins flex flex-col">
-        <CoverPhoto />
-        <IntroDetails />
+        <CoverIntroSection />
         <PerformanceSection />
         <ServicesSection />
         <LocationSection />
