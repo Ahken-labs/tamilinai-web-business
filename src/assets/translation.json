@@ -162,7 +162,18 @@
         "Edit_address": "Edit address",
         "Edit_service_areas": "Edit service areas",
         "Areas_covered": "Areas covered",
-        "Please_select_a_district_or_island_wide": "*Please select at least one district, or choose Island-wide"
+        "Please_select_a_district_or_island_wide": "*Please select at least one district, or choose Island-wide",
+        "Welcome_back_business": "Welcome back to Inai Business",
+        "Login_subtitle": "Log in to manage your storefront and connect with families and couples.",
+        "Enter_your_password": "Enter your password",
+        "Login_failed": "Login failed. Please try again.",
+        "Forgot_password": "Forgot password?",
+        "No_business_profile_yet": "Don't have a business profile yet?",
+        "Create_your_business_profile": "Create your business profile",
+        "Not_a_vendor": "Not a vendor? Looking for profile ads or planning your wedding?",
+        "Go_to_user_login": "Go to user login",
+        "Incorrect_phone_or_password": "*Incorrect phone number or password.",
+        "Already_have_a_business_account":"Already have a business account?"
     },
     "ta": {
         "Already_a_member": "ஏற்கனவே உறுப்பினரா?",
@@ -327,6 +338,17 @@
         "Edit_address": "முகவரியைத் திருத்தவும்",
         "Edit_service_areas": "சேவை பகுதிகளைத் திருத்தவும்",
         "Areas_covered": "உள்ளடங்கிய பகுதிகள்",
-        "Please_select_a_district_or_island_wide": "*குறைந்தது ஒரு மாவட்டத்தையாவது தேர்ந்தெடுக்கவும், அல்லது 'தீவு முழுவதும்' என்பதைத் தேர்ந்தெடுக்கவும்"
+        "Please_select_a_district_or_island_wide": "*குறைந்தது ஒரு மாவட்டத்தையாவது தேர்ந்தெடுக்கவும், அல்லது 'தீவு முழுவதும்' என்பதைத் தேர்ந்தெடுக்கவும்",
+        "Welcome_back_business": "Inai Business-க்கு மீண்டும் வரவேற்கிறோம்",
+        "Login_subtitle": "உங்கள் வணிகத்தை நிர்வகிக்கவும், குடும்பங்கள் மற்றும் தம்பதிகளுடன் இணையவும் உள்நுழையவும்.",
+        "Enter_your_password": "கடவுச்சொல்லை உள்ளிடவும்",
+        "Login_failed": "உள்நுழைவு தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்.",
+        "Forgot_password": "கடவுச்சொல் மறந்துவிட்டதா?",
+        "No_business_profile_yet": "இன்னும் வணிக சுயவிவரம் இல்லையா?",
+        "Create_your_business_profile": "உங்கள் வணிக சுயவிவரத்தை உருவாக்கவும்",
+        "Not_a_vendor": "வணிகர் இல்லையா? சுயவிவர விளம்பரங்கள் அல்லது திருமணத்தைத் திட்டமிடுகிறீர்களா?",
+        "Go_to_user_login": "பயனர் உள்நுழைவுக்குச் செல்லவும்",
+        "Incorrect_phone_or_password": "*தொலைபேசி எண் அல்லது கடவுச்சொல் தவறானது.",
+        "Already_have_a_business_account":"ஏற்கனவே வணிகக் கணக்கு உள்ளதா?"
     }
 }

@@ -9,20 +9,26 @@ import FormRow from "@/components/common-layout/FormRow";
 import InputBox from "@/components/common-layout/InputBox";
 import CountryCodeSelect from "@/components/ui/CountryCodeSelect";
 import { COUNTRIES } from "@/constants/countries";
-import { sanitizePhoneInput, validatePhone } from "@/utils/validation";
+import { sanitizePhoneInput, validatePhone, extractCountryCode } from "@/utils/validation";
 import { WHATSAPP_STORAGE_KEY, OTP_SENT_AT_KEY, OTP_COOLDOWN_KEY, OTP_RESEND_COUNT_KEY } from "@/constants/storageKeys";
 import { RESEND_COOLDOWNS } from "@/constants/otp";
+import { sendBizOtp } from "@/lib/api";
 
 export default function WhatsAppPage() {
   const { t } = useLang();
   const router = useRouter();
 
-  const [countryCode, setCountryCode] = useState(COUNTRIES[0]);
+  const [countryCode, setCountryCode] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(WHATSAPP_STORAGE_KEY) ?? "{}"); return (s.countryCode as typeof COUNTRIES[0]) ?? COUNTRIES[0]; } catch { return COUNTRIES[0]; }
+  });
   const [countryOpen, setCountryOpen] = useState(false);
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(WHATSAPP_STORAGE_KEY) ?? "{}"); return s.phone ?? ""; } catch { return ""; }
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [sending, setSending] = useState(false);
 
-  function handleVerify() {
+  async function handleVerify() {
     const errs: Record<string, string> = {};
     const phoneErr = validatePhone(phone, countryCode, t);
     if (phoneErr) errs.phone = phoneErr;
@@ -30,11 +36,20 @@ export default function WhatsAppPage() {
     setErrors(errs);
     if (Object.keys(errs).length) return;
 
-    sessionStorage.setItem(WHATSAPP_STORAGE_KEY, JSON.stringify({ countryCode, phone }));
-    sessionStorage.setItem(OTP_SENT_AT_KEY, String(Date.now()));
-    sessionStorage.setItem(OTP_COOLDOWN_KEY, String(RESEND_COOLDOWNS[0]));
-    sessionStorage.setItem(OTP_RESEND_COUNT_KEY, "0");
-    router.push("/register/verification/otp");
+    setSending(true);
+    try {
+      const dialCode = extractCountryCode(countryCode);
+      const res = await sendBizOtp(phone, dialCode);
+      sessionStorage.setItem(WHATSAPP_STORAGE_KEY, JSON.stringify({ countryCode, phone }));
+      sessionStorage.setItem(OTP_SENT_AT_KEY, String(Date.now()));
+      sessionStorage.setItem(OTP_COOLDOWN_KEY, String(res.cooldownSeconds ?? RESEND_COOLDOWNS[0]));
+      sessionStorage.setItem(OTP_RESEND_COUNT_KEY, "0");
+      router.push("/register/verification/otp");
+    } catch (err) {
+      setErrors({ phone: err instanceof Error ? err.message : "Failed to send OTP. Please try again." });
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -81,9 +96,10 @@ export default function WhatsAppPage() {
       </div>
 
       <Button
-        text={t("Verify_number")}
+        text={sending ? "Sending…" : t("Verify_number")}
         onPress={handleVerify}
-        className={`mt-8 sm:mt-9 md:mt-10 mx-auto ${!phone ? "!bg-[#525252] hover:!bg-[#525252]" : ""}`}
+        disabled={sending}
+        className={`mt-8 sm:mt-9 md:mt-10 mx-auto ${!phone || sending ? "!bg-[#525252] hover:!bg-[#525252]" : ""}`}
       />
     </div>
   );

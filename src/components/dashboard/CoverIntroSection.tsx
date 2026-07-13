@@ -5,26 +5,31 @@ import { useLang } from "@/context/LangContext";
 import { CareerIcon, ChevronIcon, ClockIcon, QualificationIcon, WhatsAppLineIcon } from "@/assets/Icons";
 import Button from "../common-layout/Button";
 
-// Dummy data until the dashboard is wired to the backend (GET /api/business/me) — no sessionStorage here.
-const DUMMY_DATA = {
-  businessName: "Ahken Bridal Studio",
-  photoUrl: "/images/wedding_hall.webp",
-  logoUrl: "",
-  bio: "Luxury High-End Products: Tailored exclusively using premium, high-end brands to ensure the finest quality for your skin. Soft & Flawless Finish: A beautifully radiant, long-lasting bridal look crafted for your special day. huhds dhsidns dnsjdbs dsnfjsdnv usscsa sjishid xchasixhcs shciosahc ahuchas shoiash ahouag ahshougas ahiahsx aixhaix asxuax ajsbcxa scbas csa cca scas a  xa xha sxcsbdsbud babsuab bsababsa asbja da c c a cas xcscsdc sdc sdc ds d cd c ",
-  experience: "2 years",
-  qualifications: "Certified cosmetologist",
-  careerHighlight: "Award-winning photographer, or 500+ weddings hosted",
-  countryCode: "Sri Lanka (+94)",
-  phone: "750207507",
+type CoverIntroProps = {
+  businessName: string;
+  coverPhotoUrl: string | null;
+  logoUrl: string | null;
+  bio?: string;
+  experience: string;
+  qualifications?: string;
+  careerHighlight?: string;
+  countryCode: string;
+  phone: string;
 };
 
-function useIntroData() {
-  return DUMMY_DATA;
-}
-
-export default function CoverIntroSection() {
+export default function CoverIntroSection({
+  businessName,
+  coverPhotoUrl,
+  logoUrl,
+  bio,
+  experience,
+  qualifications,
+  careerHighlight,
+  countryCode,
+  phone,
+}: CoverIntroProps) {
   const { t } = useLang();
-  const { businessName, photoUrl, logoUrl, bio, experience, qualifications, careerHighlight, countryCode, phone } = useIntroData();
+  const photoUrl = coverPhotoUrl ?? "";
   const [bioExpanded, setBioExpanded] = useState(false);
   const [bioTruncated, setBioTruncated] = useState(false);
   const bioRef = useRef<HTMLParagraphElement>(null);
@@ -42,7 +47,7 @@ export default function CoverIntroSection() {
   }, [bio]);
 
   const whatsappHref = phone
-    ? `https://wa.me/${countryCode.match(/\+\d+/)?.[0].replace("+", "") ?? ""}${phone}`
+    ? `https://wa.me/${countryCode.replace("+", "")}${phone}`
     : undefined;
 
   const hasQualificationInfo = experience || qualifications || careerHighlight;
@@ -54,14 +59,14 @@ export default function CoverIntroSection() {
         {/* this is where cover photo */}
         <div className="rounded-[24px] relative">
           <div
-            className="hidden sm:block absolute inset-0 rounded-[24px] opacity-70"
+            className="hidden sm:block absolute inset-0 rounded-[24px] opacity-100"
             style={{
-              backgroundImage: `linear-gradient(90deg, rgba(255,255,255,0.00) 50%, rgba(255,255,255,0.30) 85%, #FFF 100%), linear-gradient(270deg, rgba(255,255,255,0.00) 50%, rgba(255,255,255,0.30) 85%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255,255,255,0.20) 45%, #FFF 90%), url(${photoUrl})`,
+              backgroundImage: `linear-gradient(89deg, rgba(255,255,255,0.00) 50%, rgba(255,255,255,0.30) 85%, #FFF 100%), linear-gradient(270deg, rgba(255,255,255,0.00) 50%, rgba(255,255,255,0.30) 85%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255,255,255,0.20) 45%, #FFF 90%), url(${photoUrl})`,
               backgroundColor: "#D9D9D9",
               backgroundPosition: "center",
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
-              filter: "blur(7px)",
+              filter: "blur(4px)",
             }}
           />
           <div className="relative">

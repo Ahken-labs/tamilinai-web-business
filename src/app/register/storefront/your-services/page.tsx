@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import Button from "@/components/common-layout/Button";
 import { PlusIcon } from "@/assets/Icons";
 import AddServiceModal, { NewService } from "@/components/storefront/AddServiceModal";
 import { formatThousands } from "@/utils/format";
+import { createBizService } from "@/lib/api";
 
 type Service = NewService & { id: string };
 
@@ -16,10 +17,36 @@ export default function YourServicesPage() {
 
   const [services, setServices] = useState<Service[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  function handleSave(service: NewService) {
-    setServices((prev) => [...prev, { ...service, id: crypto.randomUUID() }]);
-    setModalOpen(false);
+  useEffect(() => {
+    history.pushState(null, "", window.location.href);
+    const handlePop = () => history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", handlePop);
+    return () => window.removeEventListener("popstate", handlePop);
+  }, []);
+  const [saveError, setSaveError] = useState("");
+
+  async function handleSave(service: NewService) {
+    setSaving(true);
+    setSaveError("");
+    try {
+      const fd = new FormData();
+      fd.append("title", service.title);
+      fd.append("price", service.price);
+      fd.append("description", service.description);
+      for (let i = 0; i < service.photos.length; i++) {
+        const blob = await fetch(service.photos[i]).then((r) => r.blob());
+        fd.append("photos", blob, `photo_${i}.jpg`);
+      }
+      const res = await createBizService(fd);
+      setServices((prev) => [...prev, { ...service, id: res.id }]);
+      setModalOpen(false);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Failed to save service.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   function handleFinish() {
@@ -69,7 +96,11 @@ export default function YourServicesPage() {
         </div>
       )}
 
-      {modalOpen && <AddServiceModal onClose={() => setModalOpen(false)} onSave={handleSave} />}
+      {saveError && (
+        <p className="mt-4 text-center text-[14px] text-[#B31B38]">{saveError}</p>
+      )}
+
+      {modalOpen && <AddServiceModal onClose={() => { if (!saving) setModalOpen(false); }} onSave={handleSave} saving={saving} />}
     </div>
   );
 }

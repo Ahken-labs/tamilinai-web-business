@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/context/LangContext";
@@ -15,6 +16,13 @@ const DEMO_SERVICES = [
 export default function ServicesPage() {
   const { t } = useLang();
   const router = useRouter();
+
+  useEffect(() => {
+    history.pushState(null, "", window.location.href);
+    const handlePop = () => history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", handlePop);
+    return () => window.removeEventListener("popstate", handlePop);
+  }, []);
 
   function handleNext() {
     router.push("/register/storefront/your-services");

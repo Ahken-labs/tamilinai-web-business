@@ -10,7 +10,6 @@ import { MultiPhotoPlaceholderIcon, TrashIcon, CheckIcon, PlusIcon, XIcon } from
 import { compressImage } from "@/utils/imageCompression";
 import { formatThousands, capitalizeFirst } from "@/utils/format";
 
-const UPLOAD_DURATION_MS = 1200;
 const MAX_PHOTOS = 4;
 const MAX_DESCRIPTION_LENGTH = 800;
 
@@ -26,11 +25,12 @@ type Photo = { id: string; url: string; uploading: boolean };
 type AddServiceModalProps = {
   onClose: () => void;
   onSave: (service: NewService) => void;
-  // When provided, the modal opens pre-filled in edit mode instead of the empty add flow.
+  onDelete?: () => void;
+  saving?: boolean;
   initialService?: NewService;
 };
 
-export default function AddServiceModal({ onClose, onSave, initialService }: AddServiceModalProps) {
+export default function AddServiceModal({ onClose, onSave, onDelete, saving, initialService }: AddServiceModalProps) {
   const { t } = useLang();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isEditing = !!initialService;
@@ -56,10 +56,7 @@ export default function AddServiceModal({ onClose, onSave, initialService }: Add
       const compressed = await compressImage(file);
       const url = URL.createObjectURL(compressed);
       const id = crypto.randomUUID();
-      setPhotos((prev) => [...prev, { id, url, uploading: true }]);
-      setTimeout(() => {
-        setPhotos((prev) => prev.map((p) => (p.id === id ? { ...p, uploading: false } : p)));
-      }, UPLOAD_DURATION_MS);
+      setPhotos((prev) => [...prev, { id, url, uploading: false }]);
     }
   }
 
@@ -195,17 +192,27 @@ export default function AddServiceModal({ onClose, onSave, initialService }: Add
       footer={
         photos.length > 0 ? (
           <>
-            <button
-              type="button"
-              onClick={() => setStep("photos")}
-              className="font-poppins text-[16px] font-medium text-[#222222] cursor-pointer transition-all duration-150 hover:text-[#B31B38] active:scale-[0.98]"
-            >
-              {t("Add_photo")}
-            </button>
+            {onDelete ? (
+              <button
+                type="button"
+                onClick={onDelete}
+                className="font-poppins text-[16px] font-medium text-[#B31B38] cursor-pointer transition-all duration-150 hover:opacity-70 active:scale-[0.98]"
+              >
+                {"Delete"}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setStep("photos")}
+                className="font-poppins text-[16px] font-medium text-[#222222] cursor-pointer transition-all duration-150 hover:text-[#B31B38] active:scale-[0.98]"
+              >
+                {t("Add_photo")}
+              </button>
+            )}
             <Button
-              text={t("Save")}
+              text={saving ? "Saving…" : t("Save")}
               onPress={handleSave}
-              disabled={!title.trim() || !price.trim() || !description.trim() || photos.length === 0}
+              disabled={saving || !title.trim() || !price.trim() || !description.trim() || photos.length === 0}
             />
           </>
         ) : undefined
@@ -259,7 +266,7 @@ export default function AddServiceModal({ onClose, onSave, initialService }: Add
             compact
             type="text"
             value={formatThousands(price)}
-            onChange={(v) => { setPrice(v.replace(/\D/g, "")); setErrors((e) => ({ ...e, price: "" })); }}
+            onChange={(v) => { const digits = v.replace(/\D/g, ""); if (parseInt(digits || "0", 10) <= 9999999) setPrice(digits); setErrors((e) => ({ ...e, price: "" })); }}
             label="Enter"
           />
         </FormRow>

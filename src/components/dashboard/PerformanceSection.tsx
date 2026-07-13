@@ -4,13 +4,12 @@ import { useState } from "react";
 import { useLang } from "@/context/LangContext";
 import { ChevronIcon } from "@/assets/Icons";
 
-// Dummy fallback data for frontend testing — remove once this reads from the backend.
-const DUMMY_DATA = {
-  profileViews: 222,
-  whatsappClicks: 12,
+type PerformanceProps = {
+  profileViews: number;
+  whatsappClicks: number;
 };
 
-export default function PerformanceSection() {
+export default function PerformanceSection({ profileViews, whatsappClicks }: PerformanceProps) {
   const { t } = useLang();
   const [expanded, setExpanded] = useState(false);
 
@@ -36,13 +35,13 @@ export default function PerformanceSection() {
             <div className="flex-1 rounded-[8px] bg-white px-2 py-2">
               <p className="font-poppins text-[14px] leading-[135%] text-[#525252]">{t("Profile_views")}</p>
               <p className="mt-[5px] font-poppins text-[18px] font-semibold leading-[135%] text-[#CD2B4A]">
-                {DUMMY_DATA.profileViews}
+                {profileViews}
               </p>
             </div>
             <div className="flex-1 rounded-[8px] bg-white px-2 py-2">
               <p className="font-poppins min-w-[118px] text-[14px] leading-[135%] text-[#525252]">{t("WhatsApp_clicks")}</p>
               <p className="mt-[5px] min-w-[118px] font-poppins text-[18px] font-semibold leading-[135%] text-[#CD2B4A]">
-                {DUMMY_DATA.whatsappClicks} {t("Leads")}
+                {whatsappClicks} {t("Leads")}
               </p>
             </div>
           </div>

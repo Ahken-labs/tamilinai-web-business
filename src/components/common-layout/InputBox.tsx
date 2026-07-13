@@ -7,6 +7,7 @@ interface InputBoxProps {
   onChange: (val: string) => void;
   label: string;
   type?: string;
+  inputMode?: "numeric" | "text" | "tel" | "search" | "email" | "url" | "none" | "decimal";
   error?: string;
   className?: string;
   suffix?: ReactNode;
@@ -14,6 +15,7 @@ interface InputBoxProps {
   onBlur?: () => void;
   compact?: boolean;
   multiline?: boolean;
+  autoComplete?: string;
 }
 
 export default function InputBox({
@@ -21,6 +23,7 @@ export default function InputBox({
   onChange,
   label,
   type = "text",
+  inputMode,
   error,
   className,
   suffix,
@@ -28,6 +31,7 @@ export default function InputBox({
   onBlur,
   compact = false,
   multiline = false,
+  autoComplete,
 }: InputBoxProps) {
   const id = useId();
   const [focused, setFocused] = useState(false);
@@ -55,6 +59,7 @@ export default function InputBox({
             rows={1}
             ref={autoGrow}
             onInput={(e) => autoGrow(e.currentTarget)}
+            autoComplete={autoComplete}
             onChange={(e) => onChange(e.target.value)}
             onFocus={() => { setFocused(true); onFocus?.(); }}
             onBlur={() => { setFocused(false); onBlur?.(); }}
@@ -77,9 +82,11 @@ export default function InputBox({
           <input
             id={id}
             type={type}
+            inputMode={inputMode}
             value={value}
             placeholder={label}
             aria-label={label}
+            autoComplete={autoComplete}
             onChange={(e) => onChange(e.target.value)}
             onFocus={() => { setFocused(true); onFocus?.(); }}
             onBlur={() => { setFocused(false); onBlur?.(); }}
@@ -111,7 +118,9 @@ export default function InputBox({
         <input
           id={id}
           type={type}
+          inputMode={inputMode}
           value={value}
+          autoComplete={autoComplete}
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => { setFocused(true); onFocus?.(); }}
           onBlur={() => { setFocused(false); onBlur?.(); }}
