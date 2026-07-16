@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import { CheckIcon } from "@/assets/Icons";
@@ -13,23 +13,24 @@ export default function ServiceAreasPage() {
   const { t } = useLang();
   const router = useRouter();
 
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>(() => {
+    try {
+      const savedAreas = sessionStorage.getItem(SERVICE_AREAS_STORAGE_KEY);
+      if (savedAreas) {
+        const parsed = JSON.parse(savedAreas) as { districts?: string[] };
+        if (parsed.districts?.length) return parsed.districts;
+      }
+      const savedLocation = sessionStorage.getItem(LOCATION_STORAGE_KEY);
+      if (savedLocation) {
+        const loc = JSON.parse(savedLocation) as { district?: string };
+        if (loc.district) return [loc.district];
+      }
+    } catch { /* no saved data */ }
+    return [];
+  });
   const [error, setError] = useState("");
 
   const islandWide = selected.length === SRI_LANKA_DISTRICTS.length;
-
-  useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem(LOCATION_STORAGE_KEY);
-      if (raw) {
-        const saved = JSON.parse(raw) as { district?: string };
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        if (saved.district) setSelected([saved.district]);
-      }
-    } catch {
-      // no saved location
-    }
-  }, []);
 
   function toggleDistrict(district: string) {
     setSelected((prev) =>

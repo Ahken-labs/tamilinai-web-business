@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import Button from "@/components/common-layout/Button";
+import Link from "next/link";
 
 export default function BasicDetailsIntroPage() {
   const { t } = useLang();
@@ -35,7 +36,10 @@ export default function BasicDetailsIntroPage() {
 
       <Button
         text={t("Get_Started")}
-        onPress={() => router.push("/register/basic-details/business-info")}
+        onPress={() => {
+          sessionStorage.setItem("inai_biz_terms_ok", "1");
+          router.push("/register/basic-details/business-info");
+        }}
         className="mt-6 mx-auto w-[173px]"
       />
 
@@ -45,6 +49,11 @@ export default function BasicDetailsIntroPage() {
         <button type="button" className="underline cursor-pointer">{t("Terms_and_Conditions")}</button>{" "}
         {t("And")}{" "}
         <button type="button" className="underline cursor-pointer">{t("Privacy_Policy")}</button>
+      </div>
+
+      <div className="mt-4 sm:mt-5 font-16 text-[#525252] text-center">
+        {t("Already_have_a_business_account")}{" "}
+        <Link href="/login" className="underline font-medium">Log in</Link>
       </div>
     </div>
   );

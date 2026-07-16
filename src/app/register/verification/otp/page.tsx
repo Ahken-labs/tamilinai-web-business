@@ -5,14 +5,16 @@ import { useRouter } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import Button from "@/components/common-layout/Button";
 import { ArrowRightIcon, WhatsAppIcon } from "@/assets/Icons";
-import { OTP_LENGTH, RESEND_COOLDOWNS, DUMMY_OTP } from "@/constants/otp";
+import { OTP_LENGTH, RESEND_COOLDOWNS } from "@/constants/otp";
 import {
   WHATSAPP_STORAGE_KEY,
   OTP_SENT_AT_KEY,
   OTP_COOLDOWN_KEY,
   OTP_RESEND_COUNT_KEY,
+  TEMP_TOKEN_KEY,
 } from "@/constants/storageKeys";
 import { extractCountryCode } from "@/utils/validation";
+import { verifyBizOtp, sendBizOtp } from "@/lib/api";
 
 // Sri Lankan numbers are shown in the locally familiar "075 020 7507" format
 // (leading 0 + groups of 3-3-4) instead of the raw +94 international form.
@@ -39,6 +41,7 @@ export default function OtpPage() {
   const [shake, setShake] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [countdown, setCountdown] = useState(0);
+  const [resending, setResending] = useState(false);
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -95,7 +98,15 @@ export default function OtpPage() {
     inputRefs.current[Math.min(pasted.length, OTP_LENGTH - 1)]?.focus();
   }
 
-  function handleVerify() {
+  function getWhatsapp() {
+    try {
+      const raw = sessionStorage.getItem(WHATSAPP_STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw) as { countryCode?: string; phone?: string };
+    } catch { return null; }
+  }
+
+  async function handleVerify() {
     const otp = digits.join("");
     if (otp.length < OTP_LENGTH) {
       setError(t("Please_enter_the_complete_OTP"));
@@ -104,23 +115,24 @@ export default function OtpPage() {
     }
 
     setVerifying(true);
-    setTimeout(() => {
-      setVerifying(false);
-
-      if (otp !== DUMMY_OTP) {
-        setError(t("Invalid_OTP_Please_try_again"));
-        triggerShake();
-        setDigits(Array(OTP_LENGTH).fill(""));
-        inputRefs.current[0]?.focus();
-        return;
-      }
-
+    try {
+      const saved = getWhatsapp();
+      const dialCode = extractCountryCode(saved?.countryCode ?? "");
+      const phone = saved?.phone ?? "";
+      const res = await verifyBizOtp(phone, dialCode, otp);
+      sessionStorage.setItem(TEMP_TOKEN_KEY, res.tempToken);
       router.push("/register/verification/create-password");
-    }, 1200);
+    } catch (err) {
+      setVerifying(false);
+      setError(err instanceof Error ? err.message : t("Invalid_OTP_Please_try_again"));
+      triggerShake();
+      setDigits(Array(OTP_LENGTH).fill(""));
+      inputRefs.current[0]?.focus();
+    }
   }
 
-  function handleResend() {
-    if (countdown > 0 || banned) return;
+  async function handleResend() {
+    if (countdown > 0 || banned || resending) return;
 
     const resendCount = Number(sessionStorage.getItem(OTP_RESEND_COUNT_KEY) ?? 0);
     if (resendCount >= RESEND_COOLDOWNS.length) {
@@ -129,14 +141,25 @@ export default function OtpPage() {
       return;
     }
 
-    const cooldown = RESEND_COOLDOWNS[resendCount];
-    sessionStorage.setItem(OTP_SENT_AT_KEY, String(Date.now()));
-    sessionStorage.setItem(OTP_COOLDOWN_KEY, String(cooldown));
-    sessionStorage.setItem(OTP_RESEND_COUNT_KEY, String(resendCount + 1));
-    setCountdown(cooldown);
-    setDigits(Array(OTP_LENGTH).fill(""));
-    setError("");
-    inputRefs.current[0]?.focus();
+    setResending(true);
+    try {
+      const saved = getWhatsapp();
+      const dialCode = extractCountryCode(saved?.countryCode ?? "");
+      const phone = saved?.phone ?? "";
+      const res = await sendBizOtp(phone, dialCode);
+      const cooldown = res.cooldownSeconds ?? RESEND_COOLDOWNS[resendCount];
+      sessionStorage.setItem(OTP_SENT_AT_KEY, String(Date.now()));
+      sessionStorage.setItem(OTP_COOLDOWN_KEY, String(cooldown));
+      sessionStorage.setItem(OTP_RESEND_COUNT_KEY, String(resendCount + 1));
+      setCountdown(cooldown);
+      setDigits(Array(OTP_LENGTH).fill(""));
+      setError("");
+      inputRefs.current[0]?.focus();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to resend OTP.");
+    } finally {
+      setResending(false);
+    }
   }
 
   const formattedTimer = `${String(Math.floor(countdown / 60)).padStart(2, "0")}:${String(countdown % 60).padStart(2, "0")}`;
@@ -190,8 +213,8 @@ export default function OtpPage() {
       <button
         type="button"
         onClick={handleResend}
-        disabled={countdown > 0 || banned}
-        className={`max-[500px]:flex hidden mt-4 mx-auto font-poppins font-16 font-medium cursor-pointer ${countdown > 0 || banned ? "text-[#767676] cursor-default" : "text-[#B31B38]"
+        disabled={countdown > 0 || banned || resending}
+        className={`max-[500px]:flex hidden mt-4 mx-auto font-poppins font-16 font-medium cursor-pointer ${countdown > 0 || banned || resending ? "text-[#767676] cursor-default" : "text-[#B31B38]"
           }`}
       >
         {countdown > 0 ? `${t("Resend_code")} (${formattedTimer})` : t("Resend_code")}
@@ -202,8 +225,8 @@ export default function OtpPage() {
           <button
             type="button"
             onClick={handleResend}
-            disabled={countdown > 0 || banned}
-            className={`min-[500px]:flex hidden mx-auto font-poppins font-16 font-medium cursor-pointer ${countdown > 0 || banned ? "text-[#767676] cursor-default" : "text-[#B31B38]"
+            disabled={countdown > 0 || banned || resending}
+            className={`min-[500px]:flex hidden mx-auto font-poppins font-16 font-medium cursor-pointer ${countdown > 0 || banned || resending ? "text-[#767676] cursor-default" : "text-[#B31B38]"
               }`}
           >
             {countdown > 0 ? `${t("Resend_code")} (${formattedTimer})` : t("Resend_code")}

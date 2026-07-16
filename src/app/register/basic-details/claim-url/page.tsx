@@ -7,35 +7,51 @@ import Button from "@/components/common-layout/Button";
 import FormRow from "@/components/common-layout/FormRow";
 import InputBox from "@/components/common-layout/InputBox";
 import { CheckIcon, XIcon } from "@/assets/Icons";
-import { CLAIM_URL_STORAGE_KEY } from "@/constants/storageKeys";
+import { CLAIM_URL_STORAGE_KEY, USERNAME_RESERVATION_KEY } from "@/constants/storageKeys";
+import { checkUsername, reserveUsername, releaseUsername } from "@/lib/api";
+import { isReservedUsername } from "@/constants/reservedUsernames";
 
-const CHECK_DELAY_MS = 500;
+const CHECK_DELAY_MS = 600;
 
 type Status = "idle" | "checking" | "available" | "taken";
-
-const TAKEN_USERNAMES = [
-  "ahkenbridal",
-  "royalphotography",
-  "weddingcars",
-  "luxurycatering",
-  "dreamdecor",
-];
 
 export default function ClaimUrlPage() {
   const { t } = useLang();
   const router = useRouter();
 
-  const [username, setUsername] = useState("");
-  const [status, setStatus] = useState<Status>("idle");
+  const [username, setUsername] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(CLAIM_URL_STORAGE_KEY) ?? "{}"); return s.username ?? ""; } catch { return ""; }
+  });
+  const [status, setStatus] = useState<Status>(() => {
+    try {
+      const s = JSON.parse(sessionStorage.getItem(CLAIM_URL_STORAGE_KEY) ?? "{}");
+      if (!s.username) return "idle";
+      return sessionStorage.getItem(USERNAME_RESERVATION_KEY) ? "available" : "checking";
+    } catch { return "idle"; }
+  });
   const [error, setError] = useState("");
+  const [reserving, setReserving] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     if (username.length < 2) return;
 
-    timeoutRef.current = setTimeout(() => {
-      setStatus(TAKEN_USERNAMES.includes(username) ? "taken" : "available");
+    timeoutRef.current = setTimeout(async () => {
+      // Skip check if we own the reservation for this username
+      const token = sessionStorage.getItem(USERNAME_RESERVATION_KEY);
+      const saved = sessionStorage.getItem(CLAIM_URL_STORAGE_KEY);
+      if (token && saved) {
+        const parsed = JSON.parse(saved) as { username?: string };
+        if (parsed.username === username) { setStatus("available"); return; }
+      }
+      if (isReservedUsername(username)) { setStatus("taken"); return; }
+      try {
+        const res = await checkUsername(username);
+        setStatus(res.available ? "available" : "taken");
+      } catch {
+        setStatus("idle");
+      }
     }, CHECK_DELAY_MS);
 
     return () => {
@@ -43,20 +59,36 @@ export default function ClaimUrlPage() {
     };
   }, [username]);
 
-  function handleNext() {
-    if (!username) {
-      setError(t("Username_required"));
-      return;
-    }
-    if (username.length < 2) {
-      setError(t("Username_min_length"));
-      return;
-    }
+  async function handleNext() {
+    if (!username) { setError(t("Username_required")); return; }
+    if (username.length < 2) { setError(t("Username_min_length")); return; }
     if (status !== "available") return;
 
     setError("");
-    sessionStorage.setItem(CLAIM_URL_STORAGE_KEY, JSON.stringify({ username }));
-    router.push("/register/basic-details/main-photo");
+
+    // Already have a valid reservation for this exact username — skip reserve call
+    const existingToken = sessionStorage.getItem(USERNAME_RESERVATION_KEY);
+    const existingSaved = sessionStorage.getItem(CLAIM_URL_STORAGE_KEY);
+    if (existingToken && existingSaved) {
+      const saved = JSON.parse(existingSaved) as { username?: string };
+      if (saved.username === username) {
+        router.push("/register/basic-details/main-photo");
+        return;
+      }
+    }
+
+    setReserving(true);
+    try {
+      const { reservationToken } = await reserveUsername(username);
+      sessionStorage.setItem(CLAIM_URL_STORAGE_KEY, JSON.stringify({ username }));
+      sessionStorage.setItem(USERNAME_RESERVATION_KEY, reservationToken);
+      router.push("/register/basic-details/main-photo");
+    } catch (err) {
+      setStatus("taken");
+      setError(err instanceof Error ? err.message : "Username no longer available.");
+    } finally {
+      setReserving(false);
+    }
   }
 
   const isTaken = status === "taken";
@@ -78,6 +110,15 @@ export default function ClaimUrlPage() {
             value={username}
             onChange={(v) => {
               const clean = v.toLowerCase().replace(/[^a-z0-9_-]/g, "");
+              if (clean !== username) {
+                const prevUsername = sessionStorage.getItem(CLAIM_URL_STORAGE_KEY);
+                const prevToken = sessionStorage.getItem(USERNAME_RESERVATION_KEY);
+                if (prevUsername && prevToken) {
+                  const prev = JSON.parse(prevUsername) as { username?: string };
+                  if (prev.username) releaseUsername(prev.username, prevToken);
+                  sessionStorage.removeItem(USERNAME_RESERVATION_KEY);
+                }
+              }
               setUsername(clean);
               setStatus(clean.length >= 2 ? "checking" : "idle");
               setError("");
@@ -137,10 +178,11 @@ export default function ClaimUrlPage() {
       </div>
 
       <Button
-        text={t("Next")}
+        text={reserving ? "..." : t("Next")}
         onPress={handleNext}
+        disabled={reserving}
         className={`mt-8 sm:mt-9 md:mt-10 mx-auto w-[173px] ${
-          username.length < 2 || isTaken ? "!bg-[#525252] hover:!bg-[#525252]" : ""
+          username.length < 2 || isTaken || reserving ? "!bg-[#525252] hover:!bg-[#525252]" : ""
         }`}
       />
     </div>

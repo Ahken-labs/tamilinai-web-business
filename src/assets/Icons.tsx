@@ -23,24 +23,22 @@ export function TamilLanguageIcon({ className = "w-6 h-6 shrink-0", color = "#52
   );
 }
 
-export function EditIcon({ className = "w-9 h-9 shrink-0", stroke = "#525252", ...props }: IconProps) {
+export function EditIcon({ className = "w-4 h-4 shrink-0", stroke = "#222222", ...props }: IconProps) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none" className={className} {...props}>
-      <rect width="36" height="36" rx="18" fill="#F0F0F0" />
-      <path d="M19.2594 9.60119L11.0494 18.2912C10.7394 18.6212 10.4394 19.2712 10.3794 19.7212L10.0094 22.9612C9.87936 24.1312 10.7194 24.9312 11.8794 24.7312L15.0994 24.1812C15.5494 24.1012 16.1794 23.7712 16.4894 23.4312L24.6994 14.7412C26.1194 13.2412 26.7594 11.5312 24.5494 9.44119C22.3494 7.37119 20.6794 8.10119 19.2594 9.60119Z" stroke={stroke} strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M17.8945 11.0508C18.3245 13.8108 20.5645 15.9208 23.3445 16.2008" stroke={stroke} strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M9 28.002H27" stroke={stroke} strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" className={className} {...props}>
+      <path d="M8.83958 2.39884L3.36624 8.19217C3.15958 8.41217 2.95958 8.84551 2.91958 9.14551L2.67291 11.3055C2.58624 12.0855 3.14624 12.6188 3.91958 12.4855L6.06624 12.1188C6.36624 12.0655 6.78624 11.8455 6.99291 11.6188L12.4662 5.82551C13.4129 4.82551 13.8396 3.68551 12.3662 2.29218C10.8996 0.912176 9.78624 1.39884 8.83958 2.39884Z" stroke={stroke} strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7.92969 3.36768C8.21635 5.20768 9.70969 6.61434 11.563 6.80101" stroke={stroke} strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2 14.668H14" stroke={stroke} strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-export function ShareIcon({ className = "w-9 h-9 shrink-0", stroke = "#525252", ...props }: IconProps) {
+export function ShareIcon({ className = "w-4 h-4 shrink-0", stroke = "#222222", ...props }: IconProps) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none" className={className} {...props}>
-      <rect width="36" height="36" rx="18" fill="#F0F0F0" />
-      <path d="M15.5 17.998C15.5 18.6611 15.2366 19.297 14.7678 19.7658C14.2989 20.2347 13.663 20.498 13 20.498C12.337 20.498 11.7011 20.2347 11.2322 19.7658C10.7634 19.297 10.5 18.6611 10.5 17.998C10.5 17.335 10.7634 16.6991 11.2322 16.2303C11.7011 15.7614 12.337 15.498 13 15.498C13.663 15.498 14.2989 15.7614 14.7678 16.2303C15.2366 16.6991 15.5 17.335 15.5 17.998Z" stroke={stroke} strokeWidth="1.5" />
-      <path d="M20.498 12.498L15.498 15.998M20.498 23.498L15.498 19.998" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M25.4961 24.5C25.4961 25.163 25.2327 25.7989 24.7639 26.2678C24.295 26.7366 23.6591 27 22.9961 27C22.3331 27 21.6972 26.7366 21.2283 26.2678C20.7595 25.7989 20.4961 25.163 20.4961 24.5C20.4961 23.837 20.7595 23.2011 21.2283 22.7322C21.6972 22.2634 22.3331 22 22.9961 22C23.6591 22 24.295 22.2634 24.7639 22.7322C25.2327 23.2011 25.4961 23.837 25.4961 24.5ZM25.4961 11.5C25.4961 12.163 25.2327 12.7989 24.7639 13.2678C24.295 13.7366 23.6591 14 22.9961 14C22.3331 14 21.6972 13.7366 21.2283 13.2678C20.7595 12.7989 20.4961 12.163 20.4961 11.5C20.4961 10.837 20.7595 10.2011 21.2283 9.73223C21.6972 9.26339 22.3331 9 22.9961 9C23.6591 9 24.295 9.26339 24.7639 9.73223C25.2327 10.2011 25.4961 10.837 25.4961 11.5Z" stroke={stroke} strokeWidth="1.5" />
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <path d="M9.5 11.998C9.5 12.6611 9.23661 13.297 8.76777 13.7658C8.29893 14.2347 7.66304 14.498 7 14.498C6.33696 14.498 5.70107 14.2347 5.23223 13.7658C4.76339 13.297 4.5 12.6611 4.5 11.998C4.5 11.335 4.76339 10.6991 5.23223 10.2303C5.70107 9.76144 6.33696 9.49805 7 9.49805C7.66304 9.49805 8.29893 9.76144 8.76777 10.2303C9.23661 10.6991 9.5 11.335 9.5 11.998Z" stroke={stroke} strokeWidth="1.5" />
+      <path d="M14.498 6.49805L9.49805 9.99805M14.498 17.498L9.49805 13.998" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M19.4961 18.5C19.4961 19.163 19.2327 19.7989 18.7639 20.2678C18.295 20.7366 17.6591 21 16.9961 21C16.3331 21 15.6972 20.7366 15.2283 20.2678C14.7595 19.7989 14.4961 19.163 14.4961 18.5C14.4961 17.837 14.7595 17.2011 15.2283 16.7322C15.6972 16.2634 16.3331 16 16.9961 16C17.6591 16 18.295 16.2634 18.7639 16.7322C19.2327 17.2011 19.4961 17.837 19.4961 18.5ZM19.4961 5.5C19.4961 6.16304 19.2327 6.79893 18.7639 7.26777C18.295 7.73661 17.6591 8 16.9961 8C16.3331 8 15.6972 7.73661 15.2283 7.26777C14.7595 6.79893 14.4961 6.16304 14.4961 5.5C14.4961 4.83696 14.7595 4.20107 15.2283 3.73223C15.6972 3.26339 16.3331 3 16.9961 3C17.6591 3 18.295 3.26339 18.7639 3.73223C19.2327 4.20107 19.4961 4.83696 19.4961 5.5Z" stroke={stroke} strokeWidth="1.5" />
     </svg>
   );
 }
@@ -143,6 +141,18 @@ export function PlusIcon({ className = "w-8 h-8 shrink-0", stroke = "#B31B38", .
   );
 }
 
+export function DeleteIcon({ className = "w-6 h-6 shrink-0", stroke = "#8D5900", ...props }: IconProps) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <path d="M21 5.97852C17.67 5.64852 14.32 5.47852 10.98 5.47852C9 5.47852 7.02 5.57852 5.04 5.77852L3 5.97852" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.50195 4.96805L8.72195 3.65805C8.88195 2.70805 9.00195 1.99805 10.692 1.99805H13.312C15.002 1.99805 15.132 2.74805 15.282 3.66805L15.502 4.96805" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M18.998 6L18.198 19.2099C18.088 20.7799 17.9979 21.9999 15.2079 21.9999H8.78795C5.99795 21.9999 5.90795 20.7799 5.79795 19.2099L4.99805 6" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.3301 16.5H13.6601" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9.49805 12.498H14.498" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function TrashIcon({ className = "w-5 h-5 shrink-0", stroke = "#222222", ...props }: IconProps) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" className={className} {...props} >
@@ -198,6 +208,41 @@ export function ExpandIcon({ className = "w-4 h-4 shrink-0", stroke = "#222222",
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" className={className} {...props}>
       <path d="M1.33463 9.81986V12.9982C1.33463 13.9187 2.08083 14.6649 3.0013 14.6649H6.16348M14.6602 6.17505V3.00602C14.6602 2.08555 13.914 1.33936 12.9935 1.33936H9.83724" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function BoostIcon({ className = "w-5 h-5 shrink-0", stroke = "white", ...props }: IconProps) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" className={className} {...props}>
+      <path d="M5.63537 11.892L8.10141 14.358M5.63537 11.892C5.63537 11.892 7.09136 8.25253 9.16387 5.72689M5.63537 11.892C0.272761 10.5511 5.09079 5.72689 9.16387 5.72689M8.10141 14.358C8.10141 14.358 11.7409 12.902 14.2665 10.8295M8.10141 14.358C9.44232 19.7196 14.2665 14.9026 14.2665 10.8295M9.16387 5.72689C11.26 3.17249 14.7155 2.02783 17.9656 2.02783C17.9656 5.27787 16.8209 8.73238 14.2665 10.8295M12.5197 7.37811L13.2462 6.65166M3.34298 14.693C2.36479 15.516 2.03906 17.9595 2.03906 17.9595C2.03906 17.9595 4.47633 17.6327 5.29732 16.6525C5.7597 16.1038 5.75354 15.2612 5.23875 14.7516C4.98424 14.5123 4.65108 14.3743 4.30195 14.3636C3.95282 14.3528 3.61177 14.4699 3.34298 14.693Z" stroke={stroke} strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function MenuIcon({ className = "w-6 h-6 shrink-0", stroke = "#525252", ...props }: IconProps) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <path d="M4 6H20M4 12H20M4 18H20" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function SettingsIcon({ className = "w-4 h-4 shrink-0", stroke = "#222222", ...props }: IconProps) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" className={className} {...props}>
+      <path d="M8 9.99902C9.10457 9.99902 10 9.10359 10 7.99902C10 6.89445 9.10457 5.99902 8 5.99902C6.89543 5.99902 6 6.89445 6 7.99902C6 9.10359 6.89543 9.99902 8 9.99902Z" stroke={stroke} strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M1.33594 8.58776V7.41443C1.33594 6.7211 1.9026 6.14776 2.6026 6.14776C3.80927 6.14776 4.3026 5.29443 3.69594 4.24776C3.34927 3.64776 3.55594 2.86776 4.1626 2.5211L5.31594 1.8611C5.8426 1.54776 6.5226 1.73443 6.83594 2.2611L6.90927 2.38776C7.50927 3.43443 8.49594 3.43443 9.1026 2.38776L9.17594 2.2611C9.48927 1.73443 10.1693 1.54776 10.6959 1.8611L11.8493 2.5211C12.4559 2.86776 12.6626 3.64776 12.3159 4.24776C11.7093 5.29443 12.2026 6.14776 13.4093 6.14776C14.1026 6.14776 14.6759 6.71443 14.6759 7.41443V8.58776C14.6759 9.2811 14.1093 9.85443 13.4093 9.85443C12.2026 9.85443 11.7093 10.7078 12.3159 11.7544C12.6626 12.3611 12.4559 13.1344 11.8493 13.4811L10.6959 14.1411C10.1693 14.4544 9.48927 14.2678 9.17594 13.7411L9.1026 13.6144C8.5026 12.5678 7.51594 12.5678 6.90927 13.6144L6.83594 13.7411C6.5226 14.2678 5.8426 14.4544 5.31594 14.1411L4.1626 13.4811C3.55594 13.1344 3.34927 12.3544 3.69594 11.7544C4.3026 10.7078 3.80927 9.85443 2.6026 9.85443C1.9026 9.85443 1.33594 9.2811 1.33594 8.58776Z" stroke={stroke} strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function LogoutIcon({ className = "w-6 h-6 shrink-0", stroke = "#8D5900", ...props }: IconProps) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" className={className} {...props}>
+      <path d="M5.92969 5.03918C6.13635 2.63918 7.36969 1.65918 10.0697 1.65918H10.1564C13.1364 1.65918 14.3297 2.85251 14.3297 5.83251V10.1792C14.3297 13.1592 13.1364 14.3525 10.1564 14.3525H10.0697C7.38969 14.3525 6.15635 13.3858 5.93635 11.0258" stroke={stroke} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.0007 8H2.41406" stroke={stroke} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3.8974 5.76562L1.66406 7.99896L3.8974 10.2323" stroke={stroke} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -323,6 +368,23 @@ export function GoogleEmptyStarIcon(props: IconProps) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" {...props}>
       <path d="M12.005 7.26625L10.313 1.85161C10.2155 1.53973 9.77409 1.53973 9.67663 1.85161L7.98456 7.26625C7.94107 7.40541 7.81219 7.50016 7.66639 7.50016H1.80817C1.48988 7.50016 1.35265 7.90364 1.60493 8.0977L6.06053 11.5251C6.17124 11.6102 6.21711 11.7554 6.17545 11.8887L4.45768 17.3856C4.36234 17.6907 4.70949 17.942 4.96958 17.7563L9.80105 14.3052C9.91695 14.2224 10.0726 14.2224 10.1885 14.3052L15.02 17.7563C15.2801 17.942 15.6272 17.6907 15.5319 17.3856L13.8141 11.8887C13.7725 11.7554 13.8183 11.6102 13.9291 11.5251L18.3847 8.0977C18.6369 7.90364 18.4997 7.50016 18.1814 7.50016H12.3232C12.1774 7.50016 12.0485 7.40541 12.005 7.26625Z" fill="#E0E0E0" />
+    </svg>
+  );
+}
+
+export function CopyIcon({ className, ...props }: IconProps) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M14.1663 11.1673V13.6673C14.1663 17.0007 12.8329 18.334 9.49959 18.334H6.33293C2.99959 18.334 1.66626 17.0007 1.66626 13.6673V10.5007C1.66626 7.16732 2.99959 5.83398 6.33293 5.83398H9.49959C12.077 5.83398 14.1663 7.924 14.1663 10.5007V11.1673" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M5.93628 3.60932C6.58836 2.26758 7.91532 1.69141 10.1065 1.69141H13.2732C16.6178 1.69141 17.9399 3.03006 17.9399 7.02474V9.52474C17.9399 11.3297 17.5489 12.5483 16.6611 13.2863" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+export function CopiedCheckIcon({ className, ...props }: IconProps) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M3.5 10.5L7.5 14.5L16.5 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }

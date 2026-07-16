@@ -14,9 +14,15 @@ export default function LocationPage() {
   const { t } = useLang();
   const router = useRouter();
 
-  const [streetAddress, setStreetAddress] = useState("");
-  const [village, setVillage] = useState("");
-  const [district, setDistrict] = useState("");
+  const [streetAddress, setStreetAddress] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(LOCATION_STORAGE_KEY) ?? "{}"); return s.streetAddress ?? ""; } catch { return ""; }
+  });
+  const [village, setVillage] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(LOCATION_STORAGE_KEY) ?? "{}"); return s.village ?? ""; } catch { return ""; }
+  });
+  const [district, setDistrict] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(LOCATION_STORAGE_KEY) ?? "{}"); return s.district ?? ""; } catch { return ""; }
+  });
   const [districtOpen, setDistrictOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 

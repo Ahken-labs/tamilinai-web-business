@@ -7,6 +7,19 @@ import { useLang } from "@/context/LangContext";
 import Button from "@/components/common-layout/Button";
 import InputBox from "@/components/common-layout/InputBox";
 import { CheckIcon, XIcon, EyeOnIcon, EyeOffIcon } from "@/assets/Icons";
+import {
+  BASIC_DETAILS_STORAGE_KEY,
+  CLAIM_URL_STORAGE_KEY,
+  LOCATION_STORAGE_KEY,
+  SERVICE_AREAS_STORAGE_KEY,
+  EXPERIENCE_STORAGE_KEY,
+  WHATSAPP_STORAGE_KEY,
+  MAIN_PHOTO_STORAGE_KEY,
+  TEMP_TOKEN_KEY,
+  USERNAME_RESERVATION_KEY,
+} from "@/constants/storageKeys";
+import { extractCountryCode } from "@/utils/validation";
+import { createBizAccount, saveSession } from "@/lib/api";
 
 export default function PasswordPage() {
   const { t } = useLang();
@@ -19,6 +32,8 @@ export default function PasswordPage() {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const passwordRules = useMemo(
     () => [
@@ -35,26 +50,74 @@ export default function PasswordPage() {
   const showRules = password.length > 0 || submitted;
   const showMatchLine = confirmPassword.length > 0 && password.length > 0;
 
-  function handleContinue() {
+  async function handleContinue() {
     setSubmitted(true);
 
-    if (!password) {
-      setPasswordError(t("Password_required"));
-      return;
-    }
-    if (!confirmPassword) {
-      setConfirmPasswordError(t("Confirm_password_required"));
-      return;
-    }
+    if (!password) { setPasswordError(t("Password_required")); return; }
+    if (!confirmPassword) { setConfirmPasswordError(t("Confirm_password_required")); return; }
     if (!allRulesMet) return;
-    if (password !== confirmPassword) {
-      setConfirmPasswordError(t("Passwords_do_not_match"));
-      return;
-    }
+    if (password !== confirmPassword) { setConfirmPasswordError(t("Passwords_do_not_match")); return; }
 
     setPasswordError("");
     setConfirmPasswordError("");
-    router.push("/register/storefront/services");
+    setSubmitError("");
+    setSubmitting(true);
+
+    try {
+      const basic = JSON.parse(sessionStorage.getItem(BASIC_DETAILS_STORAGE_KEY) ?? "{}") as Record<string, string>;
+      const claimUrl = JSON.parse(sessionStorage.getItem(CLAIM_URL_STORAGE_KEY) ?? "{}") as Record<string, string>;
+      const location = JSON.parse(sessionStorage.getItem(LOCATION_STORAGE_KEY) ?? "{}") as Record<string, string>;
+      const areas = JSON.parse(sessionStorage.getItem(SERVICE_AREAS_STORAGE_KEY) ?? "{}") as { districts?: string[]; islandWide?: boolean };
+      const exp = JSON.parse(sessionStorage.getItem(EXPERIENCE_STORAGE_KEY) ?? "{}") as Record<string, string>;
+      const wa = JSON.parse(sessionStorage.getItem(WHATSAPP_STORAGE_KEY) ?? "{}") as { countryCode?: unknown; phone?: string };
+      const tempToken = sessionStorage.getItem(TEMP_TOKEN_KEY) ?? "";
+      let reservationToken = sessionStorage.getItem(USERNAME_RESERVATION_KEY) ?? "";
+
+      // Re-reserve if expired
+      if (claimUrl.username) {
+        try {
+          const { reserveUsername } = await import("@/lib/api");
+          const res = await reserveUsername(claimUrl.username);
+          reservationToken = res.reservationToken;
+          sessionStorage.setItem(USERNAME_RESERVATION_KEY, reservationToken);
+        } catch { /* already reserved by us or still valid — use existing token */ }
+      }
+
+      const dialCode = extractCountryCode((wa.countryCode as string | undefined) ?? "");
+
+      const fd = new FormData();
+      fd.append("tempToken", tempToken);
+      fd.append("reservationToken", reservationToken);
+      fd.append("username", claimUrl.username ?? "");
+      fd.append("businessName", basic.businessName ?? "");
+      fd.append("category", basic.category ?? "");
+      if (basic.specify) fd.append("specify", basic.specify);
+      fd.append("experience", exp.experience ?? "");
+      if (exp.qualifications) fd.append("qualifications", exp.qualifications);
+      if (exp.careerHighlight) fd.append("careerHighlight", exp.careerHighlight);
+      fd.append("phone", wa.phone ?? "");
+      fd.append("countryCode", dialCode);
+      fd.append("password", password);
+      if (location.streetAddress) fd.append("streetAddress", location.streetAddress);
+      fd.append("village", location.village ?? "");
+      fd.append("district", location.district ?? "");
+      fd.append("serviceDistricts", JSON.stringify(areas.districts ?? []));
+      fd.append("islandWide", String(areas.islandWide ?? false));
+
+      const mainPhoto = sessionStorage.getItem(MAIN_PHOTO_STORAGE_KEY);
+      if (mainPhoto) {
+        const blob = await fetch(mainPhoto).then((r) => r.blob());
+        fd.append("coverPhoto", blob, "cover.jpg");
+      }
+
+      const res = await createBizAccount(fd);
+      saveSession(res.accessToken, res.business);
+      router.push("/register/storefront/services");
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Failed to create account. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -134,11 +197,15 @@ export default function PasswordPage() {
       </div>
 
 
+      {submitError && (
+        <p className="mt-4 text-center text-[14px] text-[#B31B38]">{submitError}</p>
+      )}
+
       <div className="flex min-[500px]:mt-6 md:mt-8 lg:10 mx-auto w-full max-[500px]:fixed max-[500px]:inset-x-0 max-[500px]:bottom-0 max-[500px]:z-40 max-[500px]:border-t max-[500px]:border-[#D8D8D8] max-[500px]:bg-white/60 max-[500px]:backdrop-blur-sm max-[500px]:px-4 max-[500px]:py-3">
         <Button
-          text={t("Continue")}
+          text={submitting ? "Creating account…" : t("Continue")}
           onPress={handleContinue}
-          disabled={!allRulesMet || !passwordsMatch}
+          disabled={!allRulesMet || !passwordsMatch || submitting}
           className="mx-auto min-[500px]:w-[173px] w-full"
         />
 

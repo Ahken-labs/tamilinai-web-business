@@ -9,32 +9,22 @@ import { BASIC_DETAILS_STORAGE_KEY, MAIN_PHOTO_STORAGE_KEY } from "@/constants/s
 import Button from "@/components/common-layout/Button";
 import { compressImage, fileToDataUrl } from "@/utils/imageCompression";
 
-const UPLOAD_DURATION_MS = 1800;
-
 export default function MainPhotoPage() {
   const { t } = useLang();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [category, setCategory] = useState("");
-  const [businessName, setBusinessName] = useState("");
+  const [category] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(BASIC_DETAILS_STORAGE_KEY) ?? "{}"); return s.category ?? ""; } catch { return ""; }
+  });
+  const [businessName] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(BASIC_DETAILS_STORAGE_KEY) ?? "{}"); return s.businessName ?? ""; } catch { return ""; }
+  });
   const [photoFile, setPhotoFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(() => {
+    try { return sessionStorage.getItem(MAIN_PHOTO_STORAGE_KEY) ?? null; } catch { return null; }
+  });
   const [uploading, setUploading] = useState(false);
-
-  useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem(BASIC_DETAILS_STORAGE_KEY);
-      if (raw) {
-        const saved = JSON.parse(raw) as { category?: string; businessName?: string };
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setCategory(saved.category ?? "");
-        setBusinessName(saved.businessName ?? "");
-      }
-    } catch {
-      // no saved selection
-    }
-  }, []);
 
   useEffect(() => {
     return () => {
@@ -46,12 +36,11 @@ export default function MainPhotoPage() {
 
   async function processFile(file: File) {
     if (!file.type.startsWith("image/")) return;
-
     setUploading(true);
     const compressed = await compressImage(file);
     setPhotoFile(compressed);
     setPreviewUrl(URL.createObjectURL(compressed));
-    setTimeout(() => setUploading(false), UPLOAD_DURATION_MS);
+    setUploading(false);
   }
 
   function handleFile(e: React.ChangeEvent<HTMLInputElement>) {

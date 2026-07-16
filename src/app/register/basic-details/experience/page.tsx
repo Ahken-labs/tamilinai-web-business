@@ -14,10 +14,16 @@ export default function ExperiencePage() {
   const { t } = useLang();
   const router = useRouter();
 
-  const [experience, setExperience] = useState("");
+  const [experience, setExperience] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(EXPERIENCE_STORAGE_KEY) ?? "{}"); return s.experience ?? ""; } catch { return ""; }
+  });
   const [experienceOpen, setExperienceOpen] = useState(false);
-  const [qualifications, setQualifications] = useState("");
-  const [careerHighlight, setCareerHighlight] = useState("");
+  const [qualifications, setQualifications] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(EXPERIENCE_STORAGE_KEY) ?? "{}"); return s.qualifications ?? ""; } catch { return ""; }
+  });
+  const [careerHighlight, setCareerHighlight] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(EXPERIENCE_STORAGE_KEY) ?? "{}"); return s.careerHighlight ?? ""; } catch { return ""; }
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   function handleNext() {

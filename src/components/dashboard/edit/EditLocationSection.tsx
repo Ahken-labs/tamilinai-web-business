@@ -8,12 +8,12 @@ import InputBox from "@/components/common-layout/InputBox";
 import DropdownField from "@/components/common-layout/DropdownField";
 import { SRI_LANKA_DISTRICTS } from "@/constants/districts";
 import EditModal from "./modal/EditModal";
+import { updateBizMe } from "@/lib/api";
 
-// Dummy data until this reads/writes the backend — remove once wired up.
-const DUMMY_DATA = {
-  streetAddress: "No 247, KKS Road",
-  village: "Kokuvil",
-  district: "Jaffna",
+type Props = {
+  streetAddress: string;
+  village: string;
+  district: string;
 };
 
 function EditAddressModal({
@@ -35,17 +35,26 @@ function EditAddressModal({
   const [draftDistrict, setDraftDistrict] = useState(district);
   const [districtOpen, setDistrictOpen] = useState(false);
   const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
 
-  function handleSave() {
+  async function handleSave() {
     if (!draftVillage.trim() || !draftDistrict.trim()) {
       setError(t("Village_required"));
       return;
     }
-    onSave(draftStreet, draftVillage, draftDistrict);
+    setSaving(true);
+    try {
+      await updateBizMe({ streetAddress: draftStreet, village: draftVillage, district: draftDistrict } as never);
+      onSave(draftStreet, draftVillage, draftDistrict);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to save");
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
-    <EditModal title={t("Edit_address")} onClose={onClose} onSave={handleSave} saveText={t("Save_changes")}>
+    <EditModal title={t("Edit_address")} onClose={onClose} onSave={handleSave} saveText={saving ? "Saving…" : t("Save_changes")} saveDisabled={saving}>
       <div className="mt-4 flex flex-col gap-5">
         <FormRow label={t("Street_address")}>
           <InputBox compact value={draftStreet} onChange={setDraftStreet} label={t("Street_address_Placeholder")} />
@@ -75,18 +84,18 @@ function EditAddressModal({
   );
 }
 
-export default function EditLocationSection() {
+export default function EditLocationSection({ streetAddress: initStreet, village: initVillage, district: initDistrict }: Props) {
   const { t } = useLang();
 
-  const [streetAddress, setStreetAddress] = useState(DUMMY_DATA.streetAddress);
-  const [village, setVillage] = useState(DUMMY_DATA.village);
-  const [district, setDistrict] = useState(DUMMY_DATA.district);
+  const [streetAddress, setStreetAddress] = useState(initStreet);
+  const [village, setVillage] = useState(initVillage);
+  const [district, setDistrict] = useState(initDistrict);
   const [editOpen, setEditOpen] = useState(false);
 
   return (
     <div className="px-4">
       <div className="max-w-[640px] mx-auto">
-        <div className="max-[500px]:mt-5 mt-10 mb-5  border-t border-[#EAEAEA]" />
+        <div className="max-[500px]:mt-5 mt-10 mb-5 border-t border-[#EAEAEA]" />
 
         <button
           type="button"
@@ -94,7 +103,7 @@ export default function EditLocationSection() {
           className="flex w-full items-center justify-between cursor-pointer"
         >
           <h2 className="font-poppins max-[500px]:text-[16px] text-[20px] font-semibold leading-[150%] text-[#767676]">{t("Location")}</h2>
-          <BackChevronIcon className="w-[14px] h-[14px] shrink-0 rotate-180" stroke="#525252"/>
+          <BackChevronIcon className="w-[14px] h-[14px] shrink-0 rotate-180" stroke="#525252" />
         </button>
 
         <div className="mt-3 flex flex-col gap-3">

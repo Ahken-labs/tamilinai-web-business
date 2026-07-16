@@ -15,10 +15,16 @@ export default function BusinessInfoPage() {
   const { t } = useLang();
   const router = useRouter();
 
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(BASIC_DETAILS_STORAGE_KEY) ?? "{}"); return s.category ?? ""; } catch { return ""; }
+  });
   const [categoryOpen, setCategoryOpen] = useState(false);
-  const [specify, setSpecify] = useState("");
-  const [businessName, setBusinessName] = useState("");
+  const [specify, setSpecify] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(BASIC_DETAILS_STORAGE_KEY) ?? "{}"); return s.specify ?? ""; } catch { return ""; }
+  });
+  const [businessName, setBusinessName] = useState(() => {
+    try { const s = JSON.parse(sessionStorage.getItem(BASIC_DETAILS_STORAGE_KEY) ?? "{}"); return s.businessName ?? ""; } catch { return ""; }
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const isOther = category === "Other";
