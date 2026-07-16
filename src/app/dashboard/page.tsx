@@ -17,6 +17,7 @@ import {
   OTP_SENT_AT_KEY, OTP_COOLDOWN_KEY, OTP_RESEND_COUNT_KEY,
   MAIN_PHOTO_STORAGE_KEY, TEMP_TOKEN_KEY, USERNAME_RESERVATION_KEY,
 } from "@/constants/storageKeys";
+import UpgradePlanSection from "@/components/dashboard/UpgradePlanSection";
 
 const REGISTRATION_KEYS = [
   BASIC_DETAILS_STORAGE_KEY, CLAIM_URL_STORAGE_KEY, LOCATION_STORAGE_KEY,
@@ -73,7 +74,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <DashboardHeader variant="owner" onEdit={() => router.push("/dashboard/edit")} />
+      <DashboardHeader variant="owner" onEdit={() => router.push("/dashboard/edit")} username={me.username} />
       <div className="font-poppins flex flex-col">
         <CoverIntroSection
           businessName={me.businessName}
@@ -85,9 +86,11 @@ export default function DashboardPage() {
           careerHighlight={me.careerHighlight}
           countryCode={me.countryCode}
           phone={me.phone}
+          isApproved={me.isApproved}
         />
         <PerformanceSection profileViews={perf.profileViews} whatsappClicks={perf.whatsappClicks} />
-        <ServicesSection services={toMockServices(me.services)} />
+        <UpgradePlanSection/>
+        <ServicesSection services={toMockServices(me.services)} whatsappHref={`https://wa.me/${me.countryCode.replace("+", "")}${me.phone}`} />
         <LocationSection
           streetAddress={me.streetAddress ?? undefined}
           village={me.village}
@@ -97,7 +100,7 @@ export default function DashboardPage() {
           countryCode={me.countryCode}
           phone={me.phone}
         />
-        <ReviewsSection />
+        <ReviewsSection username={me.username} />
       </div>
     </>
   );

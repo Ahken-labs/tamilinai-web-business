@@ -1,13 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useDragScroll } from "@/hooks/useDragScroll";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { useLang } from "@/context/LangContext";
 import { BackChevronIcon, ExpandIcon, XIcon } from "@/assets/Icons";
-import Modal from "@/components/ui/Modal";
+import Button from "@/components/common-layout/Button";
 
 export interface MockService {
   id: string;
@@ -31,7 +31,7 @@ function MobileScroll({ services, onExpand, onViewDetails }: { services: MockSer
   }
 
   return (
-    <div className="relative mx-auto">
+    <div className="max-[500px]:py-6 py-7 sm:py-8 md:py-9 lg:py-10 relative mx-auto">
       <button
         type="button"
         onClick={() => scrollByCard(-1)}
@@ -43,7 +43,7 @@ function MobileScroll({ services, onExpand, onViewDetails }: { services: MockSer
       <div ref={scrollRef} className="overflow-x-auto no-scrollbar" style={{ scrollbarWidth: "none" }}>
         <div className="max-[500px]:px-4 flex flex-row min-[500px]:px-4 w-max max-[500px]:gap-2 gap-4">
           {allPhotos.map((photo, i) => (
-            <div key={i} className="relative min-w-[200px] max-w-[200px] min-[500px]:min-w-[248px] min-[500px]:max-w-[248px] w-full aspect-square overflow-hidden rounded-[20.645px] bg-[#D9D9D9]">
+            <div key={i} className="relative w-[clamp(200px,26vw,248px)] aspect-square overflow-hidden rounded-[20.645px] bg-[#D9D9D9]">
               <Image src={photo.url} alt={photo.service.title} fill className="object-cover" loading="lazy" />
               <button
                 type="button"
@@ -93,14 +93,14 @@ function ServiceListItem({ service, onViewDetails }: { service: MockService; onV
       onClick={() => onViewDetails(service)}
       className="flex max-w-[640px] mx-auto w-full items-center max-[500px]:gap-3 gap-5 max-[500px]:rounded-[16px] rounded-[32px] max-[500px]:p-2 p-4 shadow-[0_0_8px_0_rgba(0,0,0,0.12)] cursor-pointer text-left"
     >
-      <div className="relative max-[500px]:h-20 h-39 max-[500px]:w-20 w-39 shrink-0 overflow-hidden max-[500px]:rounded-[12px] rounded-[20px] bg-[#D9D9D9]">
+      <div className="relative h-[clamp(80px,20vw,156px)] w-[clamp(80px,20vw,156px)] shrink-0 overflow-hidden max-[500px]:rounded-[12px] rounded-[20px] bg-[#D9D9D9]">
         {cover && <Image src={cover} alt={service.title} fill className="object-cover" loading="lazy" />}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="leading-[150%] truncate font-poppins max-[500px]:text-[14px] text-[20px] font-semibold text-[#222222]">{service.title}</p>
-        <p className="leading-[135%] max-[500px]:mt-0.5 mt-1 max-[500px]:line-clamp-2 line-clamp-3 font-poppins max-[500px]:text-[12px] text-[16px] text-[#767676]">{service.description}</p>
+        <p className="leading-[150%] truncate font-poppins max-[500px]:text-[14px] text-[16px] sm:text-[18px] md:text-[20px] font-semibold text-[#222222]">{service.title}</p>
+        <p className="leading-[135%] max-[500px]:mt-0.5 mt-1 max-[500px]:line-clamp-2 line-clamp-3 font-poppins max-[500px]:text-[12px] text-[14px] sm:text-[16px] text-[#767676]">{service.description}</p>
         <div className="max-[500px]:mt-1 mt-4 inline-flex items-center py-[2px] pl-2 pr-1.5 bg-[#F2F2F2] rounded-full gap-1">
-          <span className="font-poppins max-[500px]:text-[12px] text-[16px] leading-[150%] text-[#B31B38]">{t("View_details")}</span>
+          <span className="font-poppins max-[500px]:text-[12px] text-[14px] sm:text-[16px] leading-[150%] text-[#B31B38]">{t("View_details")}</span>
           <BackChevronIcon className="max-[500px]:w-3 w-4 max-[500px]:h-3 h-4 shrink-0 rotate-180" stroke="#B31B38" strokeWidth={2.5} />
         </div>
       </div>
@@ -124,73 +124,147 @@ function ImageLightbox({ url, title, onClose }: { url: string; title: string; on
   );
 }
 
-function DetailsModal({ service, onClose }: { service: MockService; onClose: () => void }) {
+function DetailsModal({ service, whatsappHref, onClose }: { service: MockService; whatsappHref: string | null; onClose: () => void }) {
   const { t } = useLang();
-  const [index, setIndex] = useState(0);
+  const mobileRef = useRef<HTMLDivElement>(null);
+  const desktopRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const images = service.images;
+  useScrollLock(true);
 
-  return (
-    <Modal title={service.title} onClose={onClose}>
-      {images.length > 0 && (
-        <div className="relative aspect-video w-full overflow-hidden rounded-[20px] bg-[#F2F2F2]">
-          <Image src={images[index]} alt={service.title} fill className="object-cover" />
+  function makeScrollHandler(ref: React.RefObject<HTMLDivElement | null>) {
+    return () => {
+      const el = ref.current;
+      if (!el) return;
+      setActiveIndex(Math.round(el.scrollLeft / el.offsetWidth));
+    };
+  }
 
-          {images.length > 1 && (
+  function goTo(idx: number) {
+    [mobileRef, desktopRef].forEach((ref) => {
+      const el = ref.current;
+      if (!el) return;
+      el.scrollTo({ left: idx * el.offsetWidth, behavior: "smooth" });
+    });
+  }
+
+  const carousel = (ref: React.RefObject<HTMLDivElement | null>, variant: "mobile" | "desktop") => (
+    <>
+      <div ref={ref} onScroll={makeScrollHandler(ref)} className="flex h-full overflow-x-auto snap-x snap-mandatory" style={{ scrollbarWidth: "none" }}>
+        {images.map((url, i) => (
+          <div key={i} className="flex-none w-full h-full snap-center relative">
+            <Image src={url} alt={service.title} fill className="object-cover" />
+          </div>
+        ))}
+      </div>
+      {images.length > 1 && (
+        <>
+          {variant === "desktop" && (
             <>
-              <button
-                type="button"
-                onClick={() => setIndex((i) => (i - 1 + images.length) % images.length)}
-                className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/30 backdrop-blur-sm cursor-pointer"
-              >
-                <BackChevronIcon className="w-5 h-5" stroke="#fff" strokeWidth={2.5} />
+              <button type="button" onClick={() => goTo((activeIndex - 1 + images.length) % images.length)} aria-label="Previous" className="absolute left-[5px] top-1/2 -translate-y-1/2 z-10 w-9 h-9 flex items-center justify-center cursor-pointer" style={{ borderRadius: 100, background: "rgba(0,0,0,0.30)", backdropFilter: "blur(25px)" }}>
+                <BackChevronIcon className="w-5 h-5" stroke="#fff" />
               </button>
-              <button
-                type="button"
-                onClick={() => setIndex((i) => (i + 1) % images.length)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/30 backdrop-blur-sm cursor-pointer rotate-180"
-              >
-                <BackChevronIcon className="w-5 h-5" stroke="#fff" strokeWidth={2.5} />
+              <button type="button" onClick={() => goTo((activeIndex + 1) % images.length)} aria-label="Next" className="absolute right-[5px] top-1/2 -translate-y-1/2 z-10 w-9 h-9 flex items-center justify-center cursor-pointer rotate-180" style={{ borderRadius: 100, background: "rgba(0,0,0,0.30)", backdropFilter: "blur(25px)" }}>
+                <BackChevronIcon className="w-5 h-5" stroke="#fff" />
               </button>
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-                {images.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setIndex(i)}
-                    className={`h-1.5 rounded-full transition-all cursor-pointer ${i === index ? "w-4 bg-white" : "w-1.5 bg-white/50"}`}
-                  />
-                ))}
-              </div>
             </>
           )}
-        </div>
+          {variant === "mobile" ? (
+            <div className="absolute h-[26px] bottom-2 left-1/2 -translate-x-1/2 flex items-center" style={{ gap: 8, padding: "8px 12px", borderRadius: 100, border: "1px solid rgba(255,255,255,0.50)", background: "rgba(255,255,255,0.80)", backdropFilter: "blur(25px)" }}>
+              {images.map((_, i) => (
+                <div key={i} style={i === activeIndex ? { width: 10, height: 10, borderRadius: "50%", background: "#222", flexShrink: 0 } : { width: 8, height: 8, borderRadius: "50%", background: "#B8B8B8", flexShrink: 0 }} />
+              ))}
+            </div>
+          ) : (
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex h-8 items-center px-[14.77px]" style={{ gap: 9.85, borderRadius: 100, border: "1px solid rgba(255,255,255,0.50)", background: "rgba(255,255,255,0.80)", backdropFilter: "blur(25px)" }}>
+              {images.map((_, i) => (
+                <div key={i} style={i === activeIndex ? { width: 12.308, height: 12.308, borderRadius: "50%", background: "#222", flexShrink: 0 } : { width: 9.846, height: 9.846, borderRadius: "50%", background: "#B8B8B8", flexShrink: 0 }} />
+              ))}
+            </div>
+          )}
+        </>
       )}
-      <p className="mt-4 font-poppins text-[16px] font-semibold text-[#B31B38]">Rs {service.price} {t("Rs_total")}</p>
-      <p className="mt-2 font-poppins text-[14px] leading-[150%] text-[#525252]">{service.description}</p>
-    </Modal>
+    </>
+  );
+
+  const content = (
+    <>
+      <h2 className="font-poppins text-[20px] font-semibold leading-[150%] text-[#222]">{service.title}</h2>
+      <p className="font-poppins text-[14px] leading-[150%] text-[#222]">Starting price <span className="text-[16px] font-semibold">Rs. {Number(service.price).toLocaleString()}</span></p>
+      {whatsappHref && <Button text={t("WhatsApp")} className="mt-4 inline-flex" onPress={() => window.open(whatsappHref, "_blank", "noopener")} />}
+      <p className="mt-4 font-poppins text-[14px] leading-[150%] text-[#525252]">{service.description}</p>
+    </>
+  );
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[9999] flex items-end min-[500px]:items-center justify-center min-[500px]:p-4 bg-black/60"
+      onClick={onClose}
+    >
+      {/* ── MOBILE: bottom sheet ── */}
+      <div
+        className="min-[500px]:hidden flex h-[96dvh] max-h-[96dvh] w-full flex-col overflow-hidden rounded-t-[32px] bg-white shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {images.length > 0 && (
+          <div className="relative w-full aspect-square flex-none">
+            <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-end px-1 pt-2" style={{ background: "rgba(255,255,255,0.60)", backdropFilter: "blur(11px)" }}>
+              <button type="button" onClick={onClose} aria-label="Close" className="flex items-center justify-center p-2 cursor-pointer">
+                <XIcon className="w-6 h-6" stroke="#222" />
+              </button>
+            </div>
+            {carousel(mobileRef, "mobile")}
+          </div>
+        )}
+        <div className="no-scrollbar flex-1 overflow-y-auto p-4">{content}</div>
+      </div>
+
+      {/* ── DESKTOP: header + body ── */}
+      <div
+        className="hidden min-[500px]:flex flex-col w-full max-w-[1008px] overflow-hidden rounded-[32px] bg-white shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-end px-2 py-2 shrink-0">
+          <button type="button" onClick={onClose} aria-label="Close" className="flex items-center justify-center p-2 cursor-pointer">
+            <XIcon className="w-8 h-8" stroke="#222" />
+          </button>
+        </div>
+        {/* Body */}
+        <div className="flex items-start px-2 sm:px-5 pb-6 gap-3 sm:gap-5">
+          <div className="shrink-0">
+            <div className="relative w-[40vw] max-w-[400px] aspect-square rounded-[24px] overflow-hidden bg-[#F2F2F2]">
+              {carousel(desktopRef, "desktop")}
+            </div>
+          </div>
+          <div className="no-scrollbar flex-1 overflow-y-auto pr-2">{content}</div>
+        </div>
+      </div>
+    </div>,
+    document.body
   );
 }
 
-export default function ServicesSection({ services }: { services: MockService[] }) {
+export default function ServicesSection({ services, whatsappHref }: { services: MockService[]; whatsappHref: string | null }) {
   const [lightbox, setLightbox] = useState<{ url: string; title: string } | null>(null);
   const [detailsService, setDetailsService] = useState<MockService | null>(null);
 
   return (
-    <section className="w-full bg-white font-poppins max-[500px]:mt-12 mt-20 md:max-w-[1040px] min-[500px]:px-2 sm:px-4 md:mx-auto">
+    <section className="w-full bg-white font-poppins max-[500px]:mt-6 mt-7 sm:mt-8 md:mt-9 lg:mt-10 md:max-w-[1040px] min-[500px]:px-2 sm:px-4 md:mx-auto">
       <MobileScroll
         services={services}
         onExpand={(url, title) => setLightbox({ url, title })}
         onViewDetails={setDetailsService}
       />
 
-      <div className="max-[500px]:mt-12 mt-20 flex flex-col max-[500px]:gap-4 gap-5 px-2 sm:px-4">
+      <div className="max-[500px]:mt-6 mt-10 flex flex-col max-[500px]:gap-4 gap-5 px-2 sm:px-4">
         {services.map((s) => (
           <ServiceListItem key={s.id} service={s} onViewDetails={setDetailsService} />
         ))}
       </div>
 
       {lightbox && <ImageLightbox url={lightbox.url} title={lightbox.title} onClose={() => setLightbox(null)} />}
-      {detailsService && <DetailsModal service={detailsService} onClose={() => setDetailsService(null)} />}
+      {detailsService && <DetailsModal service={detailsService} whatsappHref={whatsappHref} onClose={() => setDetailsService(null)} />}
     </section>
   );
 }

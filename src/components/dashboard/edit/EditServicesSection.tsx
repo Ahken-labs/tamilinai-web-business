@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useLang } from "@/context/LangContext";
 import { PlusIcon, BackChevronIcon } from "@/assets/Icons";
-import AddServiceModal, { NewService } from "@/components/storefront/AddServiceModal";
+import AddServiceModal from "@/components/storefront/AddServiceModal";
+import EditServiceModal from "@/components/storefront/EditServiceModal";
+import type { NewService } from "@/type/serviceTypes";
 import Image from "next/image";
 import {
   createBizService,
@@ -162,7 +164,7 @@ export default function EditServicesSection({ services: initServices }: Props) {
         )}
 
         {editingService && (
-          <AddServiceModal
+          <EditServiceModal
             initialService={{
               title: editingService.title,
               price: String(editingService.price),

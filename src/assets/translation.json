@@ -173,7 +173,22 @@
         "Not_a_vendor": "Not a vendor? Looking for profile ads or planning your wedding?",
         "Go_to_user_login": "Go to user login",
         "Incorrect_phone_or_password": "*Incorrect phone number or password.",
-        "Already_have_a_business_account":"Already have a business account?"
+        "Already_have_a_business_account":"Already have a business account?",
+        "Profile_under_review": "⏳ Profile under review",
+        "Profile_under_review_desc": "We are verifying your details. Your public link will go live within 48 hours once our team approves your storefront!",
+        "Ready_for_more_inquiries": "Ready for more inquiries?",
+        "Upgrade_plan_desc": "Upgrade your plan to get featured at the top of search results and reach more families and couples.",
+        "Boost_my_business": "Boost my business",
+        "Edit_profile": "Edit profile",
+        "Share": "Share",
+        "Boost_business": "Boost business",
+        "Account_settings": "Account settings",
+        "Logout": "Logout",
+        "Boost": "Boost",
+        "Delete_service_title": "Delete this service?",
+        "Delete_service_desc": "Are you sure you want to remove [Service Title] from your profile? Couples will no longer be able to see or inquire about this package.",
+        "Delete": "Delete",
+        "Deleting": "Deleting…"
     },
     "ta": {
         "Already_a_member": "ஏற்கனவே உறுப்பினரா?",
@@ -349,6 +364,21 @@
         "Not_a_vendor": "வணிகர் இல்லையா? சுயவிவர விளம்பரங்கள் அல்லது திருமணத்தைத் திட்டமிடுகிறீர்களா?",
         "Go_to_user_login": "பயனர் உள்நுழைவுக்குச் செல்லவும்",
         "Incorrect_phone_or_password": "*தொலைபேசி எண் அல்லது கடவுச்சொல் தவறானது.",
-        "Already_have_a_business_account":"ஏற்கனவே வணிகக் கணக்கு உள்ளதா?"
+        "Already_have_a_business_account":"ஏற்கனவே வணிகக் கணக்கு உள்ளதா?",
+        "Profile_under_review": "⏳ சுயவிவரம் ஆய்வில் உள்ளது",
+        "Profile_under_review_desc": "உங்கள் விவரங்களை நாங்கள் சரிபார்த்து வருகிறோம். எங்கள் குழு உங்கள் கடையை அங்கீகரித்தவுடன், 48 மணி நேரத்திற்குள் உங்கள் பொது இணைப்பு செயல்படும்!",
+        "Ready_for_more_inquiries": "மேலும் விசாரணைகளுக்கு தயாரா?",
+        "Upgrade_plan_desc": "தேடல் முடிவுகளின் மேல் இடத்தில் இடம்பெற மற்றும் மேலும் குடும்பங்கள் மற்றும் ஜோடிகளை சென்றடைய உங்கள் திட்டத்தை மேம்படுத்தவும்.",
+        "Boost_my_business": "எனது வணிகத்தை மேம்படுத்து",
+        "Edit_profile": "சுயவிவரத்தைத் திருத்து",
+        "Share": "பகிர்",
+        "Boost_business": "வணிகத்தை மேம்படுத்து",
+        "Account_settings": "கணக்கு அமைப்புகள்",
+        "Logout": "வெளியேறு",
+        "Boost": "மேம்படுத்து",
+        "Delete_service_title": "இந்த சேவையை நீக்கவா?",
+        "Delete_service_desc": "[Service Title] உங்கள் சுயவிவரத்தில் இருந்து அகற்ற விரும்புகிறீர்களா? ஜோடிகள் இனி இந்த தொகுப்பை பார்க்கவோ அல்லது விசாரிக்கவோ முடியாது.",
+        "Delete": "நீக்கு",
+        "Deleting": "நீக்குகிறது…"
     }
 }

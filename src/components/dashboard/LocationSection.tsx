@@ -37,20 +37,20 @@ export default function LocationSection({
       )}
 
       {locationText && (
-        <div className="max-[500px]:mt-6 mt-12">
-          <h3 className="text-center font-poppins max-[500px]:text-[16px] text-[20px] font-semibold leading-[150%] text-[#222]">
+        <div className="max-[500px]:mt-6 mt-7 sm:mt-8 md:mt-9 lg:mt-10">
+          <h3 className="text-center font-poppins font-20 font-semibold leading-[150%] text-[#222]">
             {t("Location")}
           </h3>
-          <p className="max-[500px]:mt-1 mt-2 text-center font-poppins max-[500px]:text-[14px] text-[16px] leading-[135%] text-[#767676]">{locationText}</p>
+          <p className="max-[500px]:mt-1 mt-2 text-center font-poppins font-16 leading-[135%] text-[#767676]">{locationText}</p>
         </div>
       )}
 
       {serviceDistricts.length > 0 && (
         <div className="max-[500px]:mt-4 mt-6">
-          <h3 className="text-center font-poppins max-[500px]:text-[16px] text-[20px] font-semibold leading-[150%] text-[#222]">
+          <h3 className="text-center font-poppins font-20 font-semibold leading-[150%] text-[#222]">
             {t("Service_areas")}
           </h3>
-          <p className="max-[500px]:mt-1 mt-2 max-w-[320px] text-center font-poppins max-[500px]:text-[14px] text-[16px] leading-[135%] text-[#767676]">
+          <p className="max-[500px]:mt-1 mt-2 max-w-[320px] text-center font-poppins font-16 leading-[135%] text-[#767676]">
             {islandWide ? t("Island_wide") : serviceDistricts.join(", ")}
           </p>
         </div>
