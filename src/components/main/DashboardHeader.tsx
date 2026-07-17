@@ -74,8 +74,8 @@ export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, v
     setLogoutOpen(true);
   }
 
-  function confirmLogout() {
-    bizLogout();
+  async function confirmLogout() {
+    await bizLogout();
     router.replace("/login");
   }
 
