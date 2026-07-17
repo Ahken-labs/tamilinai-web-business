@@ -90,6 +90,7 @@ export function saveSession(accessToken: string, user: BizUser) {
 export function clearSession() {
   localStorage.removeItem(BIZ_TOKEN_KEY);
   localStorage.removeItem(BIZ_USER_KEY);
+  sessionStorage.clear();
 }
 
 export function getStoredUser(): BizUser | null {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { COUNTRIES } from "@/constants/countries";
+import { COUNTRIES } from "../../constants/countries";
 import { ChevronIcon } from "../../assets/Icons";
 
 type Props = {
@@ -11,9 +11,10 @@ type Props = {
   setOpen: (val: boolean) => void;
   label?: string;
   className?: string;
+  buttonClassName?: string;
 };
 
-export default function CountryCodeSelect({ value, onChange, open, setOpen, label, className }: Props) {
+export default function CountryCodeSelect({ value, onChange, open, setOpen, label, className, buttonClassName }: Props) {
   const [search, setSearch] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -43,7 +44,8 @@ export default function CountryCodeSelect({ value, onChange, open, setOpen, labe
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className={`flex h-[40px] sm:h-[44px] md:h-[48px] w-full items-center justify-between rounded-[12px] border bg-[#F2F2F2] border-[#F2F2F2] px-4 text-left transition-colors focus:outline-none cursor-pointer`}
+        className={`flex max-[500px]:h-[52px] h-[55px] md:h-[60px] w-full items-center justify-between rounded-[12px] border px-4 text-left transition-colors focus:outline-none cursor-pointer
+          ${buttonClassName ?? (isLabelled ? "bg-[#F2F2F2] border-[#F2F2F2]" : "bg-white border-[#8C8C8C] focus:border-[#B31B38]")}`}
       >
         {isLabelled ? (
           <div className="flex flex-col gap-[2px] md:gap-[4px]">
@@ -51,7 +53,7 @@ export default function CountryCodeSelect({ value, onChange, open, setOpen, labe
             <span className="text-[14px] md:text-[16px] font-medium leading-[125%] text-[#222222]">{getCodeOnly(value)}</span>
           </div>
         ) : (
-          <span className="font-poppins text-[16px] font-normal leading-[125%] text-[#222222]">
+          <span className="text-[14px] md:text-[16px] font-normal leading-[125%] text-[#525252]">
             {getCodeOnly(value)}
           </span>
         )}

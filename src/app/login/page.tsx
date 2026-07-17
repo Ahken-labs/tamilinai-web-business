@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/context/LangContext";
@@ -8,22 +8,30 @@ import Button from "@/components/common-layout/Button";
 import InputBox from "@/components/common-layout/InputBox";
 import { COUNTRIES } from "@/constants/countries";
 import { extractCountryCode } from "@/utils/validation";
-import { bizLogin, saveSession } from "@/lib/api";
+import CountryCodeSelect from "@/components/ui/CountryCodeSelect";
+import { bizLogin, saveSession, BIZ_TOKEN_KEY } from "@/lib/api";
 import { EyeOnIcon, EyeOffIcon } from "@/assets/Icons";
 
 const BIZ_REGISTER_URL = process.env.NEXT_PUBLIC_BIZ_URL ?? "";
-const DEFAULT_COUNTRY = COUNTRIES[0];
 
 export default function LoginPage() {
   const { t } = useLang();
   const router = useRouter();
 
+  const [country, setCountry] = useState(COUNTRIES[0]);
+  const [countryOpen, setCountryOpen] = useState(false);
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [phoneError, setPhoneError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem(BIZ_TOKEN_KEY)) {
+      router.replace("/dashboard");
+    }
+  }, [router]);
 
   async function handleLogin() {
     let hasError = false;
@@ -42,8 +50,8 @@ export default function LoginPage() {
     setPasswordError("");
 
     try {
-      const dialCode = extractCountryCode(DEFAULT_COUNTRY);
-      const res = await bizLogin(phone.trim(), dialCode, password);
+      const dialCode = extractCountryCode(country);
+      const res = await bizLogin(phone.trim().replace(/^0+/, ""), dialCode, password);
       saveSession(res.accessToken, res.business);
       router.replace("/dashboard");
     } catch (err) {
@@ -80,15 +88,27 @@ export default function LoginPage() {
       />
 
       <div className="mt-5 sm:mt-6 md:mt-7 lg:mt-8 flex flex-col gap-5 sm:gap-6 md:gap-7 lg:gap-8">
-        <InputBox
-          type="tel"
-          inputMode="numeric"
-          value={phone}
-          error={phoneError}
-          onChange={(val) => setPhone(val.replace(/\D/g, ""))}
-          label={t("WhatsApp_number")}
-          className="bg-[#F2F2F2] border-[#F2F2F2]"
-        />
+        <div className="flex gap-2 sm:gap-3">
+          <CountryCodeSelect
+            value={country}
+            onChange={(val) => { setCountry(val); setPhoneError(""); }}
+            open={countryOpen}
+            setOpen={setCountryOpen}
+            className="w-[96px] sm:w-[116px] shrink-0"
+            buttonClassName="bg-[#F2F2F2] border-[#F2F2F2]"
+          />
+          <div className="flex-1">
+            <InputBox
+              type="tel"
+              inputMode="numeric"
+              value={phone}
+              error={phoneError}
+              onChange={(val) => { setPhone(val.replace(/\D/g, "")); setPhoneError(""); }}
+              label={t("WhatsApp_number")}
+              className="bg-[#F2F2F2] border-[#F2F2F2]"
+            />
+          </div>
+        </div>
         <InputBox
           type={showPassword ? "text" : "password"}
           value={password}
