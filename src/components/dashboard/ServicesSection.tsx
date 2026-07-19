@@ -124,36 +124,24 @@ function ImageLightbox({ url, title, onClose }: { url: string; title: string; on
   );
 }
 
-function DetailsModal({ service, whatsappHref, onClose }: { service: MockService; whatsappHref: string | null; onClose: () => void }) {
-  const { t } = useLang();
-  const mobileRef = useRef<HTMLDivElement>(null);
-  const desktopRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const images = service.images;
-  useScrollLock(true);
-
-  function makeScrollHandler(ref: React.RefObject<HTMLDivElement | null>) {
-    return () => {
-      const el = ref.current;
-      if (!el) return;
-      setActiveIndex(Math.round(el.scrollLeft / el.offsetWidth));
-    };
-  }
-
-  function goTo(idx: number) {
-    [mobileRef, desktopRef].forEach((ref) => {
-      const el = ref.current;
-      if (!el) return;
-      el.scrollTo({ left: idx * el.offsetWidth, behavior: "smooth" });
-    });
-  }
-
-  const carousel = (ref: React.RefObject<HTMLDivElement | null>, variant: "mobile" | "desktop") => (
+function Carousel({
+  images, title, activeIndex, variant, scrollRef, onScroll, onPrev, onNext,
+}: {
+  images: string[];
+  title: string;
+  activeIndex: number;
+  variant: "mobile" | "desktop";
+  scrollRef: React.RefObject<HTMLDivElement | null>;
+  onScroll: (e: React.UIEvent<HTMLDivElement>) => void;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  return (
     <>
-      <div ref={ref} onScroll={makeScrollHandler(ref)} className="flex h-full overflow-x-auto snap-x snap-mandatory" style={{ scrollbarWidth: "none" }}>
+      <div ref={scrollRef} onScroll={onScroll} className="flex h-full overflow-x-auto snap-x snap-mandatory" style={{ scrollbarWidth: "none" }}>
         {images.map((url, i) => (
           <div key={i} className="flex-none w-full h-full snap-center relative">
-            <Image src={url} alt={service.title} fill className="object-cover" />
+            <Image src={url} alt={title} fill className="object-cover" />
           </div>
         ))}
       </div>
@@ -161,10 +149,10 @@ function DetailsModal({ service, whatsappHref, onClose }: { service: MockService
         <>
           {variant === "desktop" && (
             <>
-              <button type="button" onClick={() => goTo((activeIndex - 1 + images.length) % images.length)} aria-label="Previous" className="absolute left-[5px] top-1/2 -translate-y-1/2 z-10 w-9 h-9 flex items-center justify-center cursor-pointer" style={{ borderRadius: 100, background: "rgba(0,0,0,0.30)", backdropFilter: "blur(25px)" }}>
+              <button type="button" onClick={onPrev} aria-label="Previous" className="absolute left-[5px] top-1/2 -translate-y-1/2 z-10 w-9 h-9 flex items-center justify-center cursor-pointer" style={{ borderRadius: 100, background: "rgba(0,0,0,0.30)", backdropFilter: "blur(25px)" }}>
                 <BackChevronIcon className="w-5 h-5" stroke="#fff" />
               </button>
-              <button type="button" onClick={() => goTo((activeIndex + 1) % images.length)} aria-label="Next" className="absolute right-[5px] top-1/2 -translate-y-1/2 z-10 w-9 h-9 flex items-center justify-center cursor-pointer rotate-180" style={{ borderRadius: 100, background: "rgba(0,0,0,0.30)", backdropFilter: "blur(25px)" }}>
+              <button type="button" onClick={onNext} aria-label="Next" className="absolute right-[5px] top-1/2 -translate-y-1/2 z-10 w-9 h-9 flex items-center justify-center cursor-pointer rotate-180" style={{ borderRadius: 100, background: "rgba(0,0,0,0.30)", backdropFilter: "blur(25px)" }}>
                 <BackChevronIcon className="w-5 h-5" stroke="#fff" />
               </button>
             </>
@@ -186,6 +174,28 @@ function DetailsModal({ service, whatsappHref, onClose }: { service: MockService
       )}
     </>
   );
+}
+
+function DetailsModal({ service, whatsappHref, onClose }: { service: MockService; whatsappHref: string | null; onClose: () => void }) {
+  const { t } = useLang();
+  const mobileRef = useRef<HTMLDivElement>(null);
+  const desktopRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const images = service.images;
+  useScrollLock(true);
+
+  function handleCarouselScroll(e: React.UIEvent<HTMLDivElement>) {
+    const el = e.currentTarget;
+    setActiveIndex(Math.round(el.scrollLeft / el.offsetWidth));
+  }
+
+  function goTo(idx: number) {
+    [mobileRef, desktopRef].forEach((ref) => {
+      const el = ref.current;
+      if (!el) return;
+      el.scrollTo({ left: idx * el.offsetWidth, behavior: "smooth" });
+    });
+  }
 
   const content = (
     <>
@@ -213,7 +223,16 @@ function DetailsModal({ service, whatsappHref, onClose }: { service: MockService
                 <XIcon className="w-6 h-6" stroke="#222" />
               </button>
             </div>
-            {carousel(mobileRef, "mobile")}
+            <Carousel
+              images={images}
+              title={service.title}
+              activeIndex={activeIndex}
+              variant="mobile"
+              scrollRef={mobileRef}
+              onScroll={handleCarouselScroll}
+              onPrev={() => goTo((activeIndex - 1 + images.length) % images.length)}
+              onNext={() => goTo((activeIndex + 1) % images.length)}
+            />
           </div>
         )}
         <div className="no-scrollbar flex-1 overflow-y-auto p-4">{content}</div>
@@ -234,7 +253,16 @@ function DetailsModal({ service, whatsappHref, onClose }: { service: MockService
         <div className="flex items-start px-2 sm:px-5 pb-6 gap-3 sm:gap-5">
           <div className="shrink-0">
             <div className="relative w-[40vw] max-w-[400px] aspect-square rounded-[24px] overflow-hidden bg-[#F2F2F2]">
-              {carousel(desktopRef, "desktop")}
+              <Carousel
+                images={images}
+                title={service.title}
+                activeIndex={activeIndex}
+                variant="desktop"
+                scrollRef={desktopRef}
+                onScroll={handleCarouselScroll}
+                onPrev={() => goTo((activeIndex - 1 + images.length) % images.length)}
+                onNext={() => goTo((activeIndex + 1) % images.length)}
+              />
             </div>
           </div>
           <div className="no-scrollbar flex-1 overflow-y-auto pr-2">{content}</div>
