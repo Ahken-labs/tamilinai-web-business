@@ -4,7 +4,8 @@ import { useRef, useState } from "react";
 import { useLang } from "@/context/LangContext";
 import { CameraIcon } from "@/assets/Icons";
 import { compressImage } from "@/utils/imageCompression";
-import { updateBizCoverPhoto, updateBizLogo } from "@/lib/api";
+import { updateBizCoverPhoto, updateBizLogo, deleteBizLogo } from "@/lib/api";
+import ChangeLogoModal from "@/components/dashboard/edit/ChangeLogoModal";
 
 const CAMERA_BUTTON_CLASS =
   "flex items-center justify-center rounded-full bg-white/80 backdrop-blur-[8px] cursor-pointer shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_0_rgba(0,0,0,0.04),0_4px_8px_0_rgba(0,0,0,0.10)]";
@@ -18,12 +19,12 @@ type Props = {
 export default function EditCoverSection({ coverPhotoUrl, logoUrl, businessName }: Props) {
   const { t } = useLang();
   const coverInputRef = useRef<HTMLInputElement>(null);
-  const logoInputRef = useRef<HTMLInputElement>(null);
 
   const [photoUrl, setPhotoUrl] = useState<string | null>(coverPhotoUrl);
   const [currentLogoUrl, setCurrentLogoUrl] = useState<string | null>(logoUrl);
   const [coverUploading, setCoverUploading] = useState(false);
   const [logoUploading, setLogoUploading] = useState(false);
+  const [logoModalOpen, setLogoModalOpen] = useState(false);
 
   async function handleCoverFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -46,10 +47,8 @@ export default function EditCoverSection({ coverPhotoUrl, logoUrl, businessName 
     }
   }
 
-  async function handleLogoFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    e.target.value = "";
+  async function handleLogoFile(file: File) {
+    setLogoModalOpen(false);
     const compressed = await compressImage(file);
     const preview = URL.createObjectURL(compressed);
     setCurrentLogoUrl(preview);
@@ -60,6 +59,19 @@ export default function EditCoverSection({ coverPhotoUrl, logoUrl, businessName 
       const { logoUrl: newUrl } = await updateBizLogo(formData);
       URL.revokeObjectURL(preview);
       setCurrentLogoUrl(newUrl);
+    } catch {
+      setCurrentLogoUrl(logoUrl);
+    } finally {
+      setLogoUploading(false);
+    }
+  }
+
+  async function handleRemoveLogo() {
+    setLogoModalOpen(false);
+    setLogoUploading(true);
+    try {
+      await deleteBizLogo();
+      setCurrentLogoUrl(null);
     } catch {
       setCurrentLogoUrl(logoUrl);
     } finally {
@@ -111,10 +123,10 @@ export default function EditCoverSection({ coverPhotoUrl, logoUrl, businessName 
           <div className="absolute min-[500px]:-bottom-11.5 -bottom-6.5 max-[500px]:left-2 min-[500px]:right-0 min-[500px]:left-0 min-[500px]:mx-auto h-13 min-[500px]:h-23 w-13 min-[500px]:w-23">
             <button
               type="button"
-              onClick={() => logoInputRef.current?.click()}
+              onClick={() => setLogoModalOpen(true)}
               disabled={logoUploading}
               aria-label="Change logo"
-              className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full border-[4px] border-white bg-[#E8E8E8]"
+              className="cursor-pointer relative flex h-full w-full items-center justify-center overflow-hidden rounded-full border-[4px] border-white bg-[#E8E8E8]"
             >
               {currentLogoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -137,7 +149,15 @@ export default function EditCoverSection({ coverPhotoUrl, logoUrl, businessName 
               <CameraIcon className="max-[500px]:w-4 w-5 max-[500px]:h-4 h-5 shrink-0" />
             </div>
           </div>
-          <input ref={logoInputRef} type="file" accept="image/*" className="hidden" onChange={handleLogoFile} />
+
+          {logoModalOpen && (
+            <ChangeLogoModal
+              onClose={() => setLogoModalOpen(false)}
+              onChoose={handleLogoFile}
+              onRemove={currentLogoUrl ? handleRemoveLogo : undefined}
+              hasLogo={!!currentLogoUrl}
+            />
+          )}
         </div>
       </div>
     </div>
