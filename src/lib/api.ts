@@ -246,6 +246,10 @@ export async function updateBizLogo(formData: FormData): Promise<{ logoUrl: stri
   return apiFetchMultipart("/me/logo", "PATCH", formData);
 }
 
+export async function deleteBizLogo(): Promise<void> {
+  await apiFetch("/me/logo", { method: "DELETE" });
+}
+
 export async function sendBizWhatsAppOtp(phone: string, countryCode: string): Promise<{ cooldownSeconds: number }> {
   return apiFetch("/me/whatsapp/request", { method: "POST", body: JSON.stringify({ phone, countryCode }) });
 }

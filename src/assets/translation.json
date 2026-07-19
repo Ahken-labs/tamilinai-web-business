@@ -188,7 +188,9 @@
         "Delete_service_title": "Delete this service?",
         "Delete_service_desc": "Are you sure you want to remove [Service Title] from your profile? Couples will no longer be able to see or inquire about this package.",
         "Delete": "Delete",
-        "Deleting": "Deleting…"
+        "Deleting": "Deleting…",
+        "Choose_from_gallery": "Choose from gallery",
+        "Remove_photo": "Remove photo"
     },
     "ta": {
         "Already_a_member": "ஏற்கனவே உறுப்பினரா?",
@@ -379,6 +381,8 @@
         "Delete_service_title": "இந்த சேவையை நீக்கவா?",
         "Delete_service_desc": "[Service Title] உங்கள் சுயவிவரத்தில் இருந்து அகற்ற விரும்புகிறீர்களா? ஜோடிகள் இனி இந்த தொகுப்பை பார்க்கவோ அல்லது விசாரிக்கவோ முடியாது.",
         "Delete": "நீக்கு",
-        "Deleting": "நீக்குகிறது…"
+        "Deleting": "நீக்குகிறது…",
+        "Choose_from_gallery": "கேலரியில் இருந்து தேர்ந்தெடுக்கவும்",
+        "Remove_photo": "புகைப்படத்தை அகற்று"
     }
 }
