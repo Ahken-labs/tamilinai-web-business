@@ -30,24 +30,29 @@ export default function ReviewsSection({ username }: { username: string }) {
   const [totalCount, setTotalCount] = useState(0);
   const [reviewsOpen, setReviewsOpen] = useState(false);
 
-  const fetchReviews = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`${BASE}/api/public/business/${username}/reviews`);
-      if (!res.ok) return;
-      const data = await res.json();
-      const mapped: Review[] = (data.reviews ?? []).map(toReview);
-      setReviews(mapped);
-      setTotalCount(data.total ?? mapped.length);
-      if (mapped.length > 0) {
-        const avg = (data.reviews as { rating: number }[]).reduce((s, r) => s + r.rating, 0) / data.reviews.length;
-        setAverageRating(Math.round(avg * 10) / 10);
-      }
-    } catch {}
-    finally { setLoading(false); }
-  };
+  useEffect(() => {
+    let cancelled = false;
 
-  useEffect(() => { fetchReviews(); }, [username]);
+    async function fetchReviews() {
+      try {
+        const res = await fetch(`${BASE}/api/public/business/${username}/reviews`);
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        if (cancelled) return;
+        const mapped: Review[] = (data.reviews ?? []).map(toReview);
+        setReviews(mapped);
+        setTotalCount(data.total ?? mapped.length);
+        if (mapped.length > 0) {
+          const avg = (data.reviews as { rating: number }[]).reduce((s, r) => s + r.rating, 0) / data.reviews.length;
+          setAverageRating(Math.round(avg * 10) / 10);
+        }
+      } catch {}
+      finally { if (!cancelled) setLoading(false); }
+    }
+
+    fetchReviews();
+    return () => { cancelled = true; };
+  }, [username]);
 
   return (
     <section className="bg-white py-12 sm:px-6 font-poppins">
