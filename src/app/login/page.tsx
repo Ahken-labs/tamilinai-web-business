@@ -105,6 +105,7 @@ export default function LoginPage() {
               error={phoneError}
               onChange={(val) => { setPhone(val.replace(/\D/g, "")); setPhoneError(""); }}
               label={t("WhatsApp_number")}
+              shortLabel={t("WhatsApp")}
               className="bg-[#F2F2F2] border-[#F2F2F2]"
             />
           </div>
