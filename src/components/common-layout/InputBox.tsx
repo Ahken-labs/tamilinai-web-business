@@ -7,6 +7,7 @@ interface InputBoxProps {
   onChange: (val: string) => void;
   label: string;
   type?: string;
+  shortLabel?: string;
   inputMode?: "numeric" | "text" | "tel" | "search" | "email" | "url" | "none" | "decimal";
   error?: string;
   className?: string;
@@ -22,6 +23,7 @@ export default function InputBox({
   value,
   onChange,
   label,
+  shortLabel,
   type = "text",
   inputMode,
   error,
@@ -110,10 +112,15 @@ export default function InputBox({
           className={`absolute left-4 transition-all duration-300 ease-in-out pointer-events-none select-none
             ${isActive
               ? "top-2 text-[12px] text-[#525252]"
-              : "top-1/2 -translate-y-1/2 text-[14px] md:text-[16px] text-[#525252]"
+              : "top-1/2 -translate-y-1/2 text-[16px] text-[#525252]"
             }`}
         >
-          {label}
+          {shortLabel ? (
+            <>
+              <span className="min-[500px]:hidden">{shortLabel}</span>
+              <span className="hidden min-[500px]:inline">{label}</span>
+            </>
+          ) : label}
         </label>
         <input
           id={id}
