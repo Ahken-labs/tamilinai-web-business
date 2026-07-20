@@ -132,7 +132,7 @@ export default function LoginPage() {
       </div>
 
       <Button
-        text={loading ? "Logging in" : t("Log_In")}
+        text={loading ? "Logging in..." : t("Log_In")}
         onPress={handleLogin}
         disabled={loading || !phone.trim() || !password.trim()}
         className="mt-5 sm:mt-6 md:mt-7 lg:mt-8 mx-auto max-[500px]:w-full min-[500px]:w-[173px]"

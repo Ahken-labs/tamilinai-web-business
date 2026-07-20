@@ -43,7 +43,7 @@ export default function OnboardingHeader({
             aria-label="Go back"
             className="h-10 w-10 flex shrink-0 max-[500px]:p-0.5 p-0 cursor-pointer select-none items-center justify-center"
           >
-            <div className="rounded-full max-[500px]:p-1.5 p-2 bg-[#F0F0F0]">
+            <div className="transition-transform duration-300 ease-out hover:scale-[1.06] rounded-full max-[500px]:p-1.5 p-2 bg-[#F0F0F0]">
               <BackChevronIcon /> </div>
           </button>
         )}

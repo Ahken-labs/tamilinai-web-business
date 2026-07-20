@@ -28,7 +28,7 @@ export default function LangDropdownButton() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label="Change language"
-        className="h-10 w-10 flex shrink-0 max-[500px]:p-0.5 p-0 cursor-pointer select-none items-center justify-center"
+        className="transition-transform duration-300 ease-out hover:scale-[1.06] h-10 w-10 flex shrink-0 max-[500px]:p-0.5 p-0 cursor-pointer select-none items-center justify-center"
       >
         <div className="rounded-full max-[500px]:p-1.5 p-2 bg-[#F0F0F0]">
           <TamilLanguageIcon />
@@ -42,7 +42,7 @@ export default function LangDropdownButton() {
               key={l.value}
               type="button"
               onClick={() => { setLang(l.value); setOpen(false); }}
-              className={`my-0.5 w-full rounded-[8px] px-5 py-2 text-left font-tamil text-[15px] font-medium transition-colors ${
+              className={`transition-transform duration-300 ease-out hover:scale-[1.02] cursor-pointer my-0.5 w-full rounded-[8px] px-5 py-2 text-left font-tamil text-[15px] font-medium transition-colors ${
                 lang === l.value
                   ? "bg-[#fdf0f2] text-[#B31B38]"
                   : "text-[#222222] hover:bg-[#EAEAEA]"
