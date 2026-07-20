@@ -220,7 +220,7 @@ export function BoostIcon({ className = "w-5 h-5 shrink-0", stroke = "white", ..
   );
 }
 
-export function BoostIconFilled({ className = "w-5 h-5 shrink-0", fill = "white", ...props }: IconProps) {
+export function BoostIconFilled({ className = "w-5 h-5 shrink-0", ...props }: IconProps) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" className={className} {...props}>
 
