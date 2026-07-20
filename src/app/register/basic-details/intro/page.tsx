@@ -46,14 +46,14 @@ export default function BasicDetailsIntroPage() {
 
       <div className="mt-5 text-[#767676] max-[500px]:text-[12px] text-[14px] text-center max-[500px]:max-w-[278px] max-w-[288px] lang-ta:max-[500px]:max-w-[340px] lang-ta:max-w-[350px] mx-auto">
         {t("Terms_agreement_prefix")}{" "}
-        <button type="button" className="underline cursor-pointer">{t("Terms_and_Conditions")}</button>{" "}
+        <button type="button" className="hover:text-[#B31B38] underline cursor-pointer">{t("Terms_and_Conditions")}</button>{" "}
         {t("And")}{" "}
-        <button type="button" className="underline cursor-pointer">{t("Privacy_Policy")}</button>
+        <button type="button" className="hover:text-[#B31B38] underline cursor-pointer">{t("Privacy_Policy")}</button>
       </div>
 
       <div className="mt-4 sm:mt-5 font-16 text-[#525252] text-center">
         {t("Already_have_a_business_account")}{" "}
-        <Link href="/login" className="underline font-medium">Log in</Link>
+        <Link href="/login" className="underline hover:text-[#B31B38] hover:font-semibold font-medium">{t("Log_In")}</Link>
       </div>
     </div>
   );

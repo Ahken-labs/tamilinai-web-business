@@ -40,6 +40,7 @@ export interface BizMe {
   isApproved: boolean;
   isRejected: boolean;
   countryCode: string;
+  createdAt: string;
   services: BizService[];
 }
 

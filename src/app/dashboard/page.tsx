@@ -74,7 +74,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <DashboardHeader variant="owner" onEdit={() => router.push("/dashboard/edit")} username={me.username} />
+      <DashboardHeader variant="owner" onEdit={() => router.push("/dashboard/edit")} onBoost={() => router.push("/dashboard/boost")} username={me.username} />
       <div className="font-poppins flex flex-col">
         <CoverIntroSection
           businessName={me.businessName}

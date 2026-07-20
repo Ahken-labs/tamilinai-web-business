@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { useLang } from "@/context/LangContext";
 import { useScrollLock } from "@/hooks/useScrollLock";
+import { useScrollHide } from "@/hooks/useScrollHide";
 import { bizLogout } from "@/lib/api";
 import {
   BackChevronIcon, BoostIcon, EditIcon, Logo, LogoutIcon,
@@ -50,11 +51,16 @@ type DashboardHeaderProps = {
   onSettings?: () => void;
   variant?: "owner" | "editing";
   username?: string;
+  showBack?: boolean;
+  hideBoost?: boolean;
+  scrollHide?: boolean;
 };
 
-export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, variant = "owner", username }: DashboardHeaderProps) {
+export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, variant = "owner", username, showBack, hideBoost, scrollHide }: DashboardHeaderProps) {
   const router = useRouter();
   const { t } = useLang();
+  const scrollVisible = useScrollHide();
+  const headerVisible = scrollHide ? scrollVisible : true;
   const showActions = variant === "owner";
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
@@ -81,13 +87,28 @@ export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, v
 
   return (
     <>
-    <header className="sticky top-0 z-50 w-full bg-white/60 backdrop-blur-sm">
+    <header
+      className="sticky top-0 z-50 w-full bg-white/60 backdrop-blur-sm transition-transform duration-300"
+      style={!headerVisible ? { transform: "translateY(-300%)" } : undefined}
+    >
       <div className="flex items-center justify-between max-[500px]:px-2 px-4 sm:px-8 md:px-10 max-[500px]:h-13 h-20">
         <div className="flex items-center">
           {showActions && (
-            <div className=" mr-2 sm:mr-3">
+            <div className={`mr-2 sm:mr-3 ${showBack ? "hidden min-[500px]:block" : ""}`}>
               <Logo className="max-[500px]:w-5 w-6 max-[500px]:h-5 h-6" />
             </div>
+          )}
+          {showActions && showBack && (
+            <button
+              type="button"
+              onClick={onBack ?? (() => router.back())}
+              aria-label="Go back"
+              className="h-10 w-10 flex shrink-0 max-[500px]:p-0.5 p-0 cursor-pointer select-none items-center justify-center"
+            >
+              <div className="rounded-full transition-transform duration-300 ease-out hover:scale-[1.06] max-[500px]:p-1.5 p-2 bg-[#F0F0F0]">
+                <BackChevronIcon />
+              </div>
+            </button>
           )}
           {!showActions && (
             <button
@@ -96,7 +117,7 @@ export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, v
               aria-label="Go back"
               className="h-10 w-10 flex shrink-0 max-[500px]:p-0.5 p-0 cursor-pointer select-none items-center justify-center"
             >
-              <div className="rounded-full max-[500px]:p-1.5 p-2 bg-[#F0F0F0]">
+              <div className="transition-transform duration-300 ease-out hover:scale-[1.06] rounded-full max-[500px]:p-1.5 p-2 bg-[#F0F0F0]">
                 <BackChevronIcon />
               </div>
             </button>
@@ -105,16 +126,18 @@ export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, v
 
         {showActions ? (
           <div className="flex items-center max-[500px]:gap-2 gap-3 sm:gap-4">
-            <button
-              type="button"
-              onClick={onBoost}
-              className="max-[500px]:px-[2px] h-10 cursor-pointer select-none"
-            >
-              <div className="flex items-center gap-1 rounded-full pl-2 pr-3 max-[500px]:py-1.5 py-2 bg-[#F0F0F0]">
-                <BoostIcon className="w-6 h-6" stroke="#525252" />
-                <span className="font-poppins text-[14px] font-medium leading-[150%] text-[#525252]">{t("Boost")}</span>
-              </div>
-            </button>
+            {!hideBoost && (
+              <button
+                type="button"
+                onClick={onBoost}
+                className="max-[500px]:px-[2px] h-10 cursor-pointer select-none"
+              >
+                <div className="transition-transform duration-300 ease-out hover:scale-[1.06] flex items-center gap-1 rounded-full pl-2 pr-3 max-[500px]:py-1.5 py-2 bg-[#F0F0F0]">
+                  <BoostIcon className="w-6 h-6" stroke="#525252" />
+                  <span className="font-poppins text-[14px] font-medium leading-[150%] text-[#525252]">{t("Boost")}</span>
+                </div>
+              </button>
+            )}
 
             <LangDropdownButton />
 
@@ -125,7 +148,7 @@ export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, v
                 aria-label="Menu"
                 className="h-10 w-10 flex shrink-0 max-[500px]:p-[2px] cursor-pointer select-none items-center justify-center"
               >
-                <div className="rounded-full max-[500px]:p-1.5 p-2 bg-[#F0F0F0]">
+                <div className="transition-transform duration-300 ease-out hover:scale-[1.06] rounded-full max-[500px]:p-1.5 p-2 bg-[#F0F0F0]">
                   <MenuIcon />
                 </div>
               </button>
@@ -135,7 +158,7 @@ export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, v
                   <button
                     type="button"
                     onClick={() => { setMenuOpen(false); onEdit?.(); }}
-                    className="mb-2 flex w-full items-center gap-3 rounded-[12px] px-2 py-2 text-left cursor-pointer hover:bg-[#F5F5F5]"
+                    className="transition-transform duration-300 ease-out hover:scale-[1.02] mb-2 flex w-full items-center gap-3 rounded-[12px] px-2 py-2 text-left cursor-pointer hover:bg-[#F5F5F5]"
                   >
                     <EditIcon className="w-4 h-4" stroke="#222222" />
                     <span className="font-poppins leading-[150%] text-[16px] text-[#222222]">{t("Edit_profile")}</span>
@@ -143,7 +166,7 @@ export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, v
                   <button
                     type="button"
                     onClick={() => { setMenuOpen(false); setShareOpen(true); }}
-                    className="mb-2 flex w-full items-center gap-3 rounded-[12px] px-2 py-2 text-left cursor-pointer hover:bg-[#F5F5F5]"
+                    className="transition-transform duration-300 ease-out hover:scale-[1.02] mb-2 flex w-full items-center gap-3 rounded-[12px] px-2 py-2 text-left cursor-pointer hover:bg-[#F5F5F5]"
                   >
                     <ShareIcon className="w-4 h-4" stroke="#222222" />
                     <span className="font-poppins leading-[150%] text-[16px] text-[#222222]">{t("Share")}</span>
@@ -152,7 +175,7 @@ export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, v
                   <button
                     type="button"
                     onClick={() => { setMenuOpen(false); onBoost?.(); }}
-                    className="mb-2 flex w-full items-center gap-3 rounded-[12px] px-2 py-2 text-left cursor-pointer hover:bg-[#F5F5F5]"
+                    className="transition-transform duration-300 ease-out hover:scale-[1.02] mb-2 flex w-full items-center gap-3 rounded-[12px] px-2 py-2 text-left cursor-pointer hover:bg-[#F5F5F5]"
                   >
                     <BoostIcon className="w-4 h-4" stroke="#222222" />
                     <span className="font-poppins leading-[150%] text-[16px] text-[#222222]">{t("Boost_business")}</span>
@@ -161,7 +184,7 @@ export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, v
                   <button
                     type="button"
                     onClick={() => { setMenuOpen(false); onSettings?.(); }}
-                    className="mb-2 flex w-full items-center gap-3 rounded-[12px] px-2 py-2 text-left cursor-pointer hover:bg-[#F5F5F5]"
+                    className="transition-transform duration-300 ease-out hover:scale-[1.02] mb-2 flex w-full items-center gap-3 rounded-[12px] px-2 py-2 text-left cursor-pointer hover:bg-[#F5F5F5]"
                   >
                     <SettingsIcon className="w-4 h-4" stroke="#222222" />
                     <span className="font-poppins leading-[150%] text-[16px] text-[#222222]">{t("Account_settings")}</span>
@@ -169,7 +192,7 @@ export default function DashboardHeader({ onBack, onEdit, onBoost, onSettings, v
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="flex w-full items-center gap-3 rounded-[12px] px-2 py-2 text-left cursor-pointer hover:bg-[#F5F5F5]"
+                    className="transition-transform duration-300 ease-out hover:scale-[1.02] flex w-full items-center gap-3 rounded-[12px] px-2 py-2 text-left cursor-pointer hover:bg-[#F5F5F5]"
                   >
                     <LogoutIcon className="w-4 h-4" stroke="#8D5900" />
                     <span className="font-poppins leading-[150%] text-[16px] text-[#8D5900]">{t("Logout")}</span>
