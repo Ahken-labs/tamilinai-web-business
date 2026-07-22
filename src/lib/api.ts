@@ -251,6 +251,45 @@ export async function deleteBizLogo(): Promise<void> {
   await apiFetch("/me/logo", { method: "DELETE" });
 }
 
+// ─── Boost Billing ────────────────────────────────────────────────────────────
+
+export interface BizBoostOrder {
+  id: string;
+  amountLkr: number;
+  promoCode: string | null;
+  discountLkr: number;
+  receiptKey: string | null;
+  status: string;
+  createdAt: string;
+}
+
+export async function getBizBoostPending(): Promise<{ order: BizBoostOrder | null }> {
+  return apiFetch("/billing/pending");
+}
+
+export async function validateBizPromo(code: string): Promise<{ valid: boolean; discountLkr: number; finalAmountLkr: number }> {
+  return apiFetch("/billing/validate-promo", { method: "POST", body: JSON.stringify({ code }) });
+}
+
+export async function bizBoostPreUpload(file: File, oldReceiptKey?: string): Promise<{ receiptKey: string }> {
+  const fd = new FormData();
+  fd.append("receipt", file);
+  if (oldReceiptKey) fd.append("oldReceiptKey", oldReceiptKey);
+  return apiFetchMultipart("/billing/pre-upload", "POST", fd);
+}
+
+export async function createBizBoostOrder(data: { promoCode?: string; receiptKey?: string }): Promise<{ orderId: string }> {
+  return apiFetch("/billing/order", { method: "POST", body: JSON.stringify(data) });
+}
+
+export async function reuployBizBoostReceipt(orderId: string, file: File): Promise<{ receiptKey: string }> {
+  const fd = new FormData();
+  fd.append("receipt", file);
+  return apiFetchMultipart(`/billing/${orderId}/receipt`, "POST", fd);
+}
+
+// ─── WhatsApp OTP ─────────────────────────────────────────────────────────────
+
 export async function sendBizWhatsAppOtp(phone: string, countryCode: string): Promise<{ cooldownSeconds: number }> {
   return apiFetch("/me/whatsapp/request", { method: "POST", body: JSON.stringify({ phone, countryCode }) });
 }
