@@ -138,3 +138,9 @@ export const COUNTRIES = [
   "Zambia (+260)",
   "Zimbabwe (+263)",
 ];
+
+// Given a plain dial code (e.g. "+94"), find the matching full COUNTRIES entry
+// (e.g. "Sri Lanka (+94)"). Falls back to Sri Lanka if no match is found.
+export function findCountryByDialCode(dialCode: string): string {
+  return COUNTRIES.find((c) => c.includes(`(${dialCode})`)) ?? COUNTRIES[0];
+}

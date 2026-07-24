@@ -22,6 +22,7 @@ export default function EditCareerHighlightModal({ value, onClose, onSave }: Edi
       onClose={onClose}
       onSave={() => onSave(draft)}
       saveText={t("Save_changes")}
+      saveDisabled={!draft.trim() || draft === value}
     >
       <div className="mt-4">
         <InputBox compact value={draft} onChange={setDraft} label={t("Career_highlight_Placeholder")} />

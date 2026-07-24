@@ -78,7 +78,7 @@ export default function CoverIntroSection({
                 <img src={photoUrl} alt="" className="h-full w-full object-cover" />
               )}
             </div>
-            <div className="absolute min-[500px]:-bottom-11.5 -bottom-6.5 max-[500px]:left-2 min-[500px]:right-0 min-[500px]:left-0 min-[500px]:mx-auto flex h-13 min-[500px]:h-23 w-13 min-[500px]:w-23 items-center justify-center overflow-hidden rounded-full border-[4px] border-white bg-[#E8E8E8]">
+            <div className="absolute min-[500px]:-bottom-11.5 -bottom-6 max-[500px]:left-2 min-[500px]:right-0 min-[500px]:left-0 min-[500px]:mx-auto flex h-[50.4px] min-[500px]:h-23 w-[50.4px] min-[500px]:w-23 items-center justify-center overflow-hidden rounded-full max-[500px]:border-[2.4px] border-[4px] border-white bg-[#E8E8E8]">
               {logoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element -- data URL from sessionStorage, next/image can't optimize it
                 <img src={logoUrl} alt="" className="h-full w-full object-cover" />

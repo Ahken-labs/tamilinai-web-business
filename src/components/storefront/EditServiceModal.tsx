@@ -28,6 +28,14 @@ export default function EditServiceModal({ onClose, onSave, onDelete, saving, in
   const [step, setStep] = useState<"details" | "photos" | "confirmDelete">("details");
   useScrollLock(step === "details");
 
+  const photoUrls = photos.map((p) => p.url);
+  const unchanged =
+    title === initialService.title &&
+    price === initialService.price &&
+    description === initialService.description &&
+    photoUrls.length === initialService.photos.length &&
+    photoUrls.every((url) => initialService.photos.includes(url));
+
   function handleSave() {
     if (!form.validate()) return;
     onSave(form.toNewService());
@@ -93,7 +101,7 @@ export default function EditServiceModal({ onClose, onSave, onDelete, saving, in
               text={saving ? "Saving…" : t("Save_changes")}
               onPress={handleSave}
               className="max-[500px]:!px-6"
-              disabled={saving || !title.trim() || !price.trim() || !description.trim() || photos.length === 0}
+              disabled={saving || !title.trim() || !price.trim() || !description.trim() || photos.length === 0 || unchanged}
             />
           </div>
         )}

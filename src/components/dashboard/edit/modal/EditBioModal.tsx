@@ -6,6 +6,10 @@ import EditModal from "./EditModal";
 
 const BIO_MAX_LENGTH = 300;
 
+function nonSpaceLength(s: string) {
+  return s.replace(/\s/g, "").length;
+}
+
 type EditBioModalProps = {
   value: string;
   onClose: () => void;
@@ -23,18 +27,19 @@ export default function EditBioModal({ value, onClose, onSave }: EditBioModalPro
       onClose={onClose}
       onSave={() => onSave(draft)}
       saveText={t("Save_changes")}
+      saveDisabled={!draft.trim()}
     >
       <div className="rounded-[12px] bg-[#F2F2F2] mt-4 px-2 py-3">
         <textarea
           value={draft}
-          onChange={(e) => setDraft(e.target.value.slice(0, BIO_MAX_LENGTH))}
+          onChange={(e) => { const v = e.target.value; if (nonSpaceLength(v) <= BIO_MAX_LENGTH) setDraft(v); }}
           placeholder={t("Bio_Placeholder")}
           rows={4}
           className="w-full resize-none bg-transparent font-poppins text-[16px] leading-[150%] text-[#222] outline-none placeholder:text-[#656565]"
         />
       </div>
       <p className="mt-1 leading-[150%] text-right font-poppins text-[14px] text-[#767676]">
-        ({draft.length} / {BIO_MAX_LENGTH})
+        ({nonSpaceLength(draft)} / {BIO_MAX_LENGTH})
       </p>
     </EditModal>
   );

@@ -34,7 +34,7 @@ export default function ServicePhotosStepModal({ form, onClose, onContinue }: Se
       title={t("Add_photos")}
       subtitle={t("Add_at_least_one_photo")}
       onClose={onClose}
-      onAddPhoto={() => fileInputRef.current?.click()}
+      onAddPhoto={photos.length < MAX_PHOTOS ? () => fileInputRef.current?.click() : undefined}
       loading={uploading}
       footer={
         <>

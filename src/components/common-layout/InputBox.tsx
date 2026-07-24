@@ -50,7 +50,7 @@ export default function InputBox({
     return (
       <div className="flex flex-col w-full">
         <div
-          className={`flex min-h-[40px] sm:min-h-[44px] md:min-h-[48px] items-start rounded-[12px] border bg-[#F2F2F2] py-2 pl-2 sm:pl-3 pr-4 transition-colors
+          className={`flex min-h-[40px] sm:min-h-[44px] md:min-h-[48px] items-center rounded-[12px] border bg-[#F2F2F2] py-2 pl-2 sm:pl-3 pr-4 transition-colors
             ${focused ? "border-[#F2F2F2]" : "border-[#F2F2F2]"} ${className ?? ""}`}
         >
           <textarea

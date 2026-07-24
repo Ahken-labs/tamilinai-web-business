@@ -11,6 +11,7 @@ import { extractCountryCode } from "@/utils/validation";
 import CountryCodeSelect from "@/components/ui/CountryCodeSelect";
 import { bizLogin, saveSession, BIZ_TOKEN_KEY } from "@/lib/api";
 import { EyeOnIcon, EyeOffIcon } from "@/assets/Icons";
+import { useLoadingText } from "@/hooks/useLoadingText";
 
 const BIZ_REGISTER_URL = process.env.NEXT_PUBLIC_BIZ_URL ?? "";
 
@@ -26,6 +27,8 @@ export default function LoginPage() {
   const [phoneError, setPhoneError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
+  const loadingText = useLoadingText(loading, "auth");
+
 
   useEffect(() => {
     if (localStorage.getItem(BIZ_TOKEN_KEY)) {
@@ -132,10 +135,10 @@ export default function LoginPage() {
       </div>
 
       <Button
-        text={loading ? "Logging in..." : t("Log_In")}
+        text={loading ? loadingText : t("Log_In")}
         onPress={handleLogin}
         disabled={loading || !phone.trim() || !password.trim()}
-        className="mt-5 sm:mt-6 md:mt-7 lg:mt-8 mx-auto max-[500px]:w-full min-[500px]:w-[173px]"
+        className="mt-5 sm:mt-6 md:mt-7 lg:mt-8 mx-auto max-[500px]:w-full min-w-[173px]"
       />
 
       <button

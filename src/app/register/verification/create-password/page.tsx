@@ -20,6 +20,7 @@ import {
 } from "@/constants/storageKeys";
 import { extractCountryCode } from "@/utils/validation";
 import { createBizAccount, saveSession } from "@/lib/api";
+import { useLoadingText } from "@/hooks/useLoadingText";
 
 export default function PasswordPage() {
   const { t } = useLang();
@@ -34,6 +35,8 @@ export default function PasswordPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const loadingText = useLoadingText(submitting, "register");
+
 
   const passwordRules = useMemo(
     () => [
@@ -203,10 +206,10 @@ export default function PasswordPage() {
 
       <div className="flex min-[500px]:mt-6 md:mt-8 lg:10 mx-auto w-full max-[500px]:fixed max-[500px]:inset-x-0 max-[500px]:bottom-0 max-[500px]:z-40 max-[500px]:border-t max-[500px]:border-[#D8D8D8] max-[500px]:bg-white/60 max-[500px]:backdrop-blur-sm max-[500px]:px-4 max-[500px]:py-3">
         <Button
-          text={submitting ? "Creating account…" : t("Continue")}
+          text={submitting ? loadingText : t("Continue")}
           onPress={handleContinue}
           disabled={!allRulesMet || !passwordsMatch || submitting}
-          className="mx-auto min-[500px]:w-[173px] w-full"
+          className="mx-auto min-w-[173px] w-full"
         />
 
       </div>

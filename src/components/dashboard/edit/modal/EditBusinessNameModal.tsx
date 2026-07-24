@@ -16,7 +16,7 @@ export default function EditBusinessNameModal({ value, onClose, onSave }: EditBu
   const [draft, setDraft] = useState(value);
 
   return (
-    <EditModal title={t("Edit_business_name")} onClose={onClose} onSave={() => onSave(draft)} saveText={t("Save_changes")}>
+    <EditModal title={t("Edit_business_name")} onClose={onClose} onSave={() => onSave(draft)} saveText={t("Save_changes")} saveDisabled={!draft.trim()}>
       <div className="mt-2">
         <InputBox compact value={draft} onChange={setDraft} label={t("Business_Name_Placeholder")} />
       </div>

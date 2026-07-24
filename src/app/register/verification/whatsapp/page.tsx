@@ -77,6 +77,7 @@ export default function WhatsAppPage() {
             value={countryCode}
             onChange={(val) => { setCountryCode(val); setPhone(""); setErrors((e) => ({ ...e, phone: "" })); }}
             open={countryOpen}
+            buttonClassName="bg-[#F2F2F2] border-[#F2F2F2] min-[500px]:!h-12 !h-10"
             setOpen={setCountryOpen}
           />
         </FormRow>
@@ -91,6 +92,7 @@ export default function WhatsAppPage() {
               setErrors((e) => ({ ...e, phone: "" }));
             }}
             label={t("Type_here")}
+            className="min-[500px]:!h-12 !h-10"
           />
         </FormRow>
       </div>

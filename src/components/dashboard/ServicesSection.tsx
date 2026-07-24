@@ -32,6 +32,10 @@ function MobileScroll({ services, onExpand, onViewDetails }: { services: MockSer
 
   return (
     <div className="max-[500px]:py-6 py-7 sm:py-8 md:py-9 lg:py-10 relative mx-auto">
+      <div
+        className="min-[500px]:flex hidden pointer-events-none absolute left-[-1px] top-0 bottom-0 w-10 z-10"
+        style={{ background: "linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 35%, rgba(243,244,246,0.00) 100%)" }}
+      />
       <button
         type="button"
         onClick={() => scrollByCard(-1)}
@@ -75,8 +79,8 @@ function MobileScroll({ services, onExpand, onViewDetails }: { services: MockSer
         <BackChevronIcon className="w-6 h-6" stroke="#fff" strokeWidth={3} />
       </button>
       <div
-        className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 z-10"
-        style={{ background: "linear-gradient(270deg, #F3F4F6 0%, #F3F4F6 25%, rgba(243,244,246,0.00) 100%)" }}
+        className="min-[500px]:flex hidden pointer-events-none absolute right-[-1px] top-0 bottom-0 w-10 z-10"
+        style={{ background: "linear-gradient(270deg, #FFFFFF 0%, #FFFFFF 35%, rgba(243,244,246,0.00) 100%)" }}
       />
     </div>
   );
@@ -285,7 +289,7 @@ export default function ServicesSection({ services, whatsappHref }: { services: 
         onViewDetails={setDetailsService}
       />
 
-      <div className="max-[500px]:mt-6 mt-10 flex flex-col max-[500px]:gap-4 gap-5 px-2 sm:px-4">
+      <div className="max-[500px]:mt-6 mt-10 flex flex-col max-[500px]:gap-4 gap-5 px-4 sm:px-4">
         {services.map((s) => (
           <ServiceListItem key={s.id} service={s} onViewDetails={setDetailsService} />
         ))}
