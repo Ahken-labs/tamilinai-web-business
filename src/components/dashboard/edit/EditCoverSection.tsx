@@ -120,13 +120,13 @@ export default function EditCoverSection({ coverPhotoUrl, logoUrl, businessName 
           </button>
           <input ref={coverInputRef} type="file" accept="image/*" className="hidden" onChange={handleCoverFile} />
 
-          <div className="absolute min-[500px]:-bottom-11.5 -bottom-6.5 max-[500px]:left-2 min-[500px]:right-0 min-[500px]:left-0 min-[500px]:mx-auto h-13 min-[500px]:h-23 w-13 min-[500px]:w-23">
+          <div className="absolute min-[500px]:-bottom-11.5 -bottom-6 max-[500px]:left-2 min-[500px]:right-0 min-[500px]:left-0 min-[500px]:mx-auto h-[50.4px] min-[500px]:h-23 w-[50.4px] min-[500px]:w-23">
             <button
               type="button"
               onClick={() => setLogoModalOpen(true)}
               disabled={logoUploading}
               aria-label="Change logo"
-              className="cursor-pointer relative flex h-full w-full items-center justify-center overflow-hidden rounded-full border-[4px] border-white bg-[#E8E8E8]"
+              className="cursor-pointer relative flex h-full w-full items-center justify-center overflow-hidden rounded-full max-[500px]:border-[2.4px] border-[4px] border-white bg-[#E8E8E8]"
             >
               {currentLogoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element

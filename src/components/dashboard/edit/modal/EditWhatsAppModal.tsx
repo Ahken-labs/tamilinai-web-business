@@ -5,7 +5,8 @@ import { useLang } from "@/context/LangContext";
 import FormRow from "@/components/common-layout/FormRow";
 import InputBox from "@/components/common-layout/InputBox";
 import CountryCodeSelect from "@/components/ui/CountryCodeSelect";
-import { sanitizePhoneInput, validatePhone } from "@/utils/validation";
+import { sanitizePhoneInput, validatePhone, extractCountryCode } from "@/utils/validation";
+import { findCountryByDialCode } from "@/constants/countries";
 import EditModal from "./EditModal";
 import { sendBizWhatsAppOtp, confirmBizWhatsAppOtp } from "@/lib/api";
 
@@ -20,20 +21,22 @@ export default function EditWhatsAppModal({ countryCode, phone, onClose, onSave 
   const { t } = useLang();
 
   const [step, setStep] = useState<"phone" | "otp">("phone");
-  const [draftCountryCode, setDraftCountryCode] = useState(countryCode);
+  const [draftCountry, setDraftCountry] = useState(() => findCountryByDialCode(countryCode));
   const [draftPhone, setDraftPhone] = useState(phone);
   const [otp, setOtp] = useState("");
   const [countryOpen, setCountryOpen] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const draftDialCode = extractCountryCode(draftCountry);
+
   async function handleSendOtp() {
-    const phoneErr = validatePhone(draftPhone, draftCountryCode, t);
+    const phoneErr = validatePhone(draftPhone, draftCountry, t);
     if (phoneErr) { setError(phoneErr); return; }
     setError("");
     setLoading(true);
     try {
-      await sendBizWhatsAppOtp(draftPhone, draftCountryCode);
+      await sendBizWhatsAppOtp(draftPhone, draftDialCode);
       setStep("otp");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to send OTP");
@@ -47,8 +50,8 @@ export default function EditWhatsAppModal({ countryCode, phone, onClose, onSave 
     setError("");
     setLoading(true);
     try {
-      await confirmBizWhatsAppOtp(draftPhone, draftCountryCode, otp.trim());
-      onSave(draftCountryCode, draftPhone);
+      await confirmBizWhatsAppOtp(draftPhone, draftDialCode, otp.trim());
+      onSave(draftDialCode, draftPhone);
     } catch (e) {
       setError(e instanceof Error ? e.message : t("Invalid_OTP_Please_try_again"));
     } finally {
@@ -60,7 +63,7 @@ export default function EditWhatsAppModal({ countryCode, phone, onClose, onSave 
     return (
       <EditModal
         title={t("Verify_your_WhatsApp")}
-        subtitle={`${t("We_sent_a_code_to")} ${draftCountryCode} ${draftPhone}`}
+        subtitle={`${t("We_sent_a_code_to")} ${draftDialCode} ${draftPhone}`}
         onClose={onClose}
         onSave={handleConfirmOtp}
         saveText={loading ? t("Verifying") : "Confirm"}
@@ -95,15 +98,16 @@ export default function EditWhatsAppModal({ countryCode, phone, onClose, onSave 
       onClose={onClose}
       onSave={handleSendOtp}
       saveText={loading ? "Sending…" : t("Send_verification_code")}
-      saveDisabled={loading}
+      saveDisabled={loading || (draftDialCode === countryCode && draftPhone === phone)}
     >
       <div className="flex flex-col mt-4 gap-5">
         <FormRow label={t("Country_code")} required>
           <CountryCodeSelect
-            value={draftCountryCode}
-            onChange={(val) => { setDraftCountryCode(val); setDraftPhone(""); setError(""); }}
+            value={draftCountry}
+            onChange={(val) => { setDraftCountry(val); setDraftPhone(""); setError(""); }}
             open={countryOpen}
             setOpen={setCountryOpen}
+            buttonClassName="bg-[#F2F2F2] border-[#F2F2F2] min-[500px]:!h-12 !h-10"
           />
         </FormRow>
 
@@ -113,10 +117,11 @@ export default function EditWhatsAppModal({ countryCode, phone, onClose, onSave 
             type="tel"
             value={draftPhone}
             onChange={(val) => {
-              setDraftPhone(sanitizePhoneInput(val, draftCountryCode));
+              setDraftPhone(sanitizePhoneInput(val, draftCountry));
               setError("");
             }}
             label={t("Type_here")}
+            className="min-[500px]:!h-12 !h-10"
           />
         </FormRow>
       </div>

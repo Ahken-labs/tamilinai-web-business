@@ -18,7 +18,7 @@ export default function EditExperienceModal({ value, onClose, onSave }: EditExpe
   const [open, setOpen] = useState(false);
 
   return (
-    <EditModal title={t("Edit_experience")} onClose={onClose} onSave={() => onSave(draft)} saveText={t("Save_changes")} saveDisabled={!draft}>
+    <EditModal title={t("Edit_experience")} onClose={onClose} onSave={() => onSave(draft)} saveText={t("Save_changes")} saveDisabled={!draft || draft === value}>
       <div className="mt-4">
         <DropdownField
           placeholder={t("Select_ellipsis")}

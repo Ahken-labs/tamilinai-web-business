@@ -28,6 +28,7 @@ function EditServiceAreasModal({
   const [saving, setSaving] = useState(false);
 
   const islandWide = selected.length === SRI_LANKA_DISTRICTS.length;
+  const unchanged = selected.length === districts.length && selected.every((d) => districts.includes(d));
 
   function toggleDistrict(district: string) {
     setSelected((prev) =>
@@ -58,7 +59,7 @@ function EditServiceAreasModal({
   }
 
   return (
-    <EditModal title={t("Edit_service_areas")} subtitle={t("Service_areas_description")} onClose={onClose} onSave={handleSave} saveText={saving ? "Saving…" : t("Save_changes")} saveDisabled={saving}>
+    <EditModal title={t("Edit_service_areas")} subtitle={t("Service_areas_description")} onClose={onClose} onSave={handleSave} saveText={saving ? "Saving…" : t("Save_changes")} saveDisabled={saving || selected.length === 0 || unchanged}>
       <div className="mt-4 flex flex-col gap-8">
         <label className="flex items-center gap-3 rounded-[12px] bg-[#F2F2F2] px-4 py-3 cursor-pointer">
           <Toggle checked={islandWide} onChange={handleIslandWideChange} />

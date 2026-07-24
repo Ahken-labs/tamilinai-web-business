@@ -49,7 +49,7 @@ export default function Modal({ title, subtitle, onClose, onAddPhoto, headerLeft
               <PlusIcon className="h-6 sm:h-7 md:h-8 w-6 sm:h-7 md:w-8" stroke="#222222" />
             </button>
           ) : (
-            <div className="h-6 sm:h-7 md:h-8 w-6 sm:h-7 md:w-8" />
+            <div className="w-10 h-10" />
           )}
         </div>
 

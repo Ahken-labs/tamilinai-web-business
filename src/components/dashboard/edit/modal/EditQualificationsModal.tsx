@@ -22,6 +22,7 @@ export default function EditQualificationsModal({ value, onClose, onSave }: Edit
       onClose={onClose}
       onSave={() => onSave(draft)}
       saveText={t("Save_changes")}
+      saveDisabled={!draft.trim() || draft === value}
     >
       <div className="mt-4">
         <InputBox compact value={draft} onChange={setDraft} label={t("Qualifications_Placeholder")} />
